@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_background"
+    tools:context=".ui.settingpage.SettingPage">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/backOfCard"
+        android:layout_width="360dp"
+        android:layout_height="640dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/reminder_contact_background"
+        android:backgroundTint="@color/card_background"
+        android:elevation="3dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.88"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.9">
+
+
+        <ImageView
+            android:id="@+id/cardFrameBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/reminder_contact_frame" />
+
+        <ImageView
+            android:id="@+id/saveBackDecor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/reminder_edit_icon_back" />
+
+
+        <ImageView
+            android:id="@+id/rightHideFrameBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:background="@drawable/blank_background"
+            app:layout_constraintBottom_toBottomOf="@+id/cardFrameBack"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <ImageView
+            android:id="@+id/leftHideFrameBack"
+            android:layout_width="wrap_content"
+            android:layout_height="170dp"
+            android:background="@drawable/blank_background"
+            app:layout_constraintBottom_toTopOf="@+id/bottomHideFrameBack"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/rightHideFrameBack"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <ImageView
+            android:id="@+id/bottomHideFrameBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/blank_background_bottom"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+        <TextView
+            android:id="@+id/bottomIdentifyTextBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_bold"
+            android:text="@string/setting"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@+id/bottomHideFrameBack"
+            app:layout_constraintEnd_toEndOf="@+id/bottomHideFrameBack"
+            app:layout_constraintStart_toStartOf="@+id/bottomHideFrameBack"
+            app:layout_constraintTop_toTopOf="@+id/bottomHideFrameBack"
+            app:layout_constraintVertical_bias="0.565" />
+
+        <View
+            android:id="@+id/saveIconBack"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@drawable/setting_navigation_icon"
+            app:layout_constraintBottom_toBottomOf="@+id/saveBackDecor"
+            app:layout_constraintEnd_toEndOf="@+id/saveBackDecor"
+            app:layout_constraintStart_toStartOf="@+id/saveBackDecor"
+            app:layout_constraintTop_toTopOf="@+id/saveBackDecor" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:fontFamily="@font/poppins_bold"
+            android:text="@string/music"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/musicOn"
+            app:layout_constraintStart_toStartOf="@+id/cardFrameBack"
+            app:layout_constraintTop_toTopOf="@+id/musicOn" />
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/musicOn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"
+            android:checked="false"
+            app:layout_constraintBottom_toBottomOf="@+id/cardFrameBack"
+            app:layout_constraintEnd_toEndOf="@+id/cardFrameBack"
+            app:layout_constraintTop_toTopOf="@+id/cardFrameBack" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#9c64a6</color>
+    <color name="purple_500">#6a0080</color>
+    <color name="purple_700">#4a0072</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FFFFFF</color>
+    <color name="white">#000000</color>
+    <color name="reminder_list_background">#1a2614</color>
+    <color name="card_background">#10272f</color>
+    <color name="switch_off">#1f1725</color>
+    <color name="switch_on">#c1b7dc</color>
+    <color name="background_gradient_start_color">#E8DEF8</color>
+    <color name="background_gradient_end_color">#2A2831</color>
+    <color name="reminder_tint">#e7e5eb</color>
+    <color name="first_letter_color">#FFFFFF</color>
+
+</resources>

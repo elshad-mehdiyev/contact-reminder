@@ -1,0 +1,43 @@
+<resources>
+    <string name="app_name">Remember Friends</string>
+    <string name="rationale_for_permission">" Permission is required to view contacts."</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <string name="january">january</string>
+    <string name="february">february</string>
+    <string name="mart">mart</string>
+    <string name="april">april</string>
+    <string name="may">may</string>
+    <string name="june">june</string>
+    <string name="july">july</string>
+    <string name="august">august</string>
+    <string name="september">september</string>
+    <string name="october">october</string>
+    <string name="november">november</string>
+    <string name="december">december</string>
+    <string name="reminder_for_contacts">Reminder for contact</string>
+    <string name="creator_text">Creator</string>
+    <string name="date">Date</string>
+    <string name="interval">Interval</string>
+    <string name="example">example: 3</string>
+    <string name="clock_settings">Time Settings</string>
+    <string name="begining_hour">Begining</string>
+    <string name="end_hour">End</string>
+    <string name="date_setting">Date Settings</string>
+    <string name="cancel">cancel</string>
+    <string name="create">create</string>
+    <string name="reminder">Reminder</string>
+    <string name="editor">Editor</string>
+    <string name="setting">Setting</string>
+    <string name="music">Music</string>
+    <string name="reminder_navigatin_bar">Reminder</string>
+    <string name="select_contacts_navigation_bar">Select Contact</string>
+    <string name="setting_navigation_bar">Settings</string>
+    <string name="snackbar_delete_text">Succesfully  delete  item</string>
+    <string name="snackbar_undo">undo</string>
+    <string name="select_date_text">SELECT A DATE</string>
+    <string name="select_time_text">Select time</string>
+    <string name="unknown_error">Unknown  error</string>
+    <string name="have_a_one_notification">You have a notification</string>
+
+</resources>

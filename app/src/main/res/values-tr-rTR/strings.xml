@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Remember Friends</string>
+    <string name="rationale_for_permission">"Kişileri görüntülemek için izin gereklidir. "</string>
+    <string name="january">ocak</string>
+    <string name="february">şubat</string>
+    <string name="mart">mart</string>
+    <string name="april">nisan</string>
+    <string name="may">may</string>
+    <string name="june">haziran</string>
+    <string name="july">temmuz</string>
+    <string name="august">ağustos</string>
+    <string name="september">eylül</string>
+    <string name="october">ekim</string>
+    <string name="november">kasım</string>
+    <string name="december">aralık</string>
+    <string name="reminder_for_contacts">"İletişim için hatırlatma "</string>
+    <string name="creator_text">Kurucu</string>
+    <string name="date">Tarih</string>
+    <string name="interval">Aralık</string>
+    <string name="example">örnek: 4</string>
+    <string name="clock_settings">Zaman Ayarları</string>
+    <string name="begining_hour">Başlangıç</string>
+    <string name="end_hour">Son</string>
+    <string name="date_setting">Tarih  ayarları</string>
+    <string name="cancel">iptal et</string>
+    <string name="create">kur</string>
+    <string name="reminder">Hatırlatıcı</string>
+    <string name="editor">Editör</string>
+    <string name="setting">Ayar</string>
+    <string name="music">Müzik</string>
+    <string name="reminder_navigatin_bar">Hatırlatıcı</string>
+    <string name="select_contacts_navigation_bar">Kişiyi seçin</string>
+    <string name="setting_navigation_bar">Ayarlar</string>
+    <string name="snackbar_delete_text">Hatırlatıcı  başarıyla  silindi</string>
+    <string name="snackbar_undo">geri al</string>
+    <string name="select_date_text">Tarih  seçin</string>
+    <string name="select_time_text">Zaman  seçin</string>
+    <string name="unknown_error">Bilinmeyen  hata</string>
+    <string name="have_a_one_notification">Bir  bildirimin var</string>
+</resources>

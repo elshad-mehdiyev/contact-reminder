@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Remember Friends</string>
+    <string name="rationale_for_permission">Kontaktlari gormek üçün icazə lazımdır.</string>
+    <string name="january">yanvar</string>
+    <string name="february">fevral</string>
+    <string name="mart">mart</string>
+    <string name="april">aprel</string>
+    <string name="may">may</string>
+    <string name="june">iyun</string>
+    <string name="july">iyul</string>
+    <string name="august">avqust</string>
+    <string name="september">sentyabr</string>
+    <string name="october">oktyabr</string>
+    <string name="november">noyabr</string>
+    <string name="december">dekabr</string>
+    <string name="reminder_for_contacts">kontakt üçün xatırladıcı</string>
+    <string name="creator_text">Qurucu</string>
+    <string name="date">Tarix</string>
+    <string name="interval">İnterval</string>
+    <string name="example">nümunə: 5</string>
+    <string name="clock_settings">Saat  parametrləri</string>
+    <string name="begining_hour">Başlanğıc</string>
+    <string name="end_hour">Son</string>
+    <string name="date_setting">Tarix  parametrləri</string>
+    <string name="cancel">ləğv et</string>
+    <string name="create">qur</string>
+    <string name="reminder">Xatırladıcı</string>
+    <string name="editor">Redaktor</string>
+    <string name="setting">Parametr</string>
+    <string name="music">Musiqi</string>
+    <string name="reminder_navigatin_bar">Xatırladıcı</string>
+    <string name="select_contacts_navigation_bar">Kontakt seçin</string>
+    <string name="setting_navigation_bar">Parametrlər</string>
+    <string name="snackbar_delete_text">Xatırladıcı  uğurla  silindi</string>
+    <string name="snackbar_undo">geri qaytar</string>
+    <string name="select_date_text">Tarix  seçin</string>
+    <string name="select_time_text">Vaxt  seçin</string>
+    <string name="unknown_error">Bilinmeyen xeta</string>
+    <string name="have_a_one_notification">Bir bildirişiniz  var</string>
+</resources>

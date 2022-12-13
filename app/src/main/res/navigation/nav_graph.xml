@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/reminderContactList">
+
+    <fragment
+        android:id="@+id/contactList"
+        android:name="com.iremeber.rememberfriends.ui.contactlist.ContactList"
+        android:label="contact_list"
+        tools:layout="@layout/contact_list" />
+    <fragment
+        android:id="@+id/reminderContactList"
+        android:name="com.iremeber.rememberfriends.ui.reminderpage.ReminderContactList"
+        android:label="reminder_contact_list"
+        tools:layout="@layout/reminder_contact_list" />
+    <fragment
+        android:id="@+id/settingPage"
+        android:name="com.iremeber.rememberfriends.ui.settingpage.SettingPage"
+        android:label="setting_page"
+        tools:layout="@layout/setting_page" />
+</navigation>

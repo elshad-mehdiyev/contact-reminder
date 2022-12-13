@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/reminderContactList"
+        android:icon="@drawable/reminder_navigation_icon"
+        android:title="@string/reminder_navigatin_bar"  />
+    <item
+        android:id="@+id/contactList"
+        android:icon="@drawable/all_contacts_navigation_icon"
+        android:title="@string/select_contacts_navigation_bar" />
+    <item
+        android:id="@+id/settingPage"
+        android:icon="@drawable/setting_navigation_icon"
+        android:title="@string/setting_navigation_bar" />
+</menu>
