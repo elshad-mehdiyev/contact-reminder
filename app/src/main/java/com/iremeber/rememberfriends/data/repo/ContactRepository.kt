@@ -8,8 +8,10 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.LiveData
 import com.iremeber.rememberfriends.data.local.AllContacts
+import com.iremeber.rememberfriends.data.local.AllRingtones
 import com.iremeber.rememberfriends.data.local.ContactDao
 import com.iremeber.rememberfriends.data.models.AllContactModel
+import com.iremeber.rememberfriends.data.models.AllRingtonesModel
 import com.iremeber.rememberfriends.data.models.FavoriteContactModel
 import com.iremeber.rememberfriends.data.models.ScheduleAlarmModel
 import com.iremeber.rememberfriends.utils.util.Constants.SETTING_PREFERENCE
@@ -22,7 +24,8 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 class ContactRepository @Inject constructor(
     private val dao: ContactDao,
     private val fetchContact: AllContacts,
-    private val context: Context
+    private val context: Context,
+    private val fetchRingtones: AllRingtones
 ): ContactRepositoryInterface {
     override suspend fun saveContacts(list: List<AllContactModel>) {
         dao.saveContacts(list)
@@ -109,4 +112,11 @@ class ContactRepository @Inject constructor(
             val preferenceKey = intPreferencesKey(key)
             dataStore[preferenceKey] ?: 0
         }
+
+    /**
+     * getAllRingtones
+     */
+    override suspend fun getAllRingtonesFromDevice(): ArrayList<AllRingtonesModel> {
+        return fetchRingtones.getRingtonesList()
+    }
 }

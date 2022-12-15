@@ -2,6 +2,7 @@ package com.iremeber.rememberfriends.data.repo
 
 import androidx.lifecycle.LiveData
 import com.iremeber.rememberfriends.data.models.AllContactModel
+import com.iremeber.rememberfriends.data.models.AllRingtonesModel
 import com.iremeber.rememberfriends.data.models.FavoriteContactModel
 import com.iremeber.rememberfriends.data.models.ScheduleAlarmModel
 import kotlinx.coroutines.flow.Flow
@@ -47,4 +48,8 @@ interface ContactRepositoryInterface {
      */
     suspend fun saveToDataStore(key: String, value: Int)
     suspend fun getDataFromDataStore(key: String): Flow<Int>
+    /**
+     * All  Ringtones
+     */
+    suspend fun getAllRingtonesFromDevice(): ArrayList<AllRingtonesModel>
 }

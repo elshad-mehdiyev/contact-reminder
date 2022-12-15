@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.iremeber.rememberfriends.data.models.AllContactModel
+import com.iremeber.rememberfriends.data.models.AllRingtonesModel
 import com.iremeber.rememberfriends.data.models.FavoriteContactModel
 import com.iremeber.rememberfriends.data.models.ScheduleAlarmModel
 import com.iremeber.rememberfriends.data.repo.ContactRepositoryInterface
@@ -30,9 +31,20 @@ class ContactListViewModel @Inject constructor(
     val contactListData: LiveData<List<AllContactModel>>
         get() = _contactListData
 
+    private val _ringtonesListData = MutableLiveData<List<AllRingtonesModel>>()
+    val ringtonesListData: LiveData<List<AllRingtonesModel>>
+        get() = _ringtonesListData
+
     val allContactList = repositoryInterface.getAllContact()
     val favoriteContactList = repositoryInterface.getAllFromFavorites()
 
+    fun getRingtonesFromDevice() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val ringtonesListAsync = async { repositoryInterface.getAllRingtonesFromDevice() }
+            val ringtones = ringtonesListAsync.await()
+            _ringtonesListData.postValue(ringtones)
+        }
+    }
 
     fun getContactFromDevice() {
         viewModelScope.launch(Dispatchers.IO) {

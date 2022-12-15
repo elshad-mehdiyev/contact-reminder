@@ -2,6 +2,8 @@ package com.iremeber.rememberfriends.ui.reminderpage
 
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.iremeber.rememberfriends.data.models.FavoriteContactModel
 import com.iremeber.rememberfriends.databinding.ReminderContactListRecycleItemBinding
 import com.iremeber.rememberfriends.utils.util.CommonUtil
-import kotlin.random.Random
 
 class ReminderContactListAdapter: RecyclerView.Adapter<ReminderContactListAdapter.ReminderHolder>() {
     inner class ReminderHolder(val binding: ReminderContactListRecycleItemBinding): RecyclerView.ViewHolder(binding.root)
@@ -50,6 +51,10 @@ class ReminderContactListAdapter: RecyclerView.Adapter<ReminderContactListAdapte
         onTextClickListener = listener
     }
     private var onEditTextClickListener: ((view: EditText) -> Unit)? = null
+
+    fun setEditTextClickListener(listener : (view: EditText) -> Unit) {
+        onEditTextClickListener = listener
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReminderHolder {
         val binding = ReminderContactListRecycleItemBinding.inflate(

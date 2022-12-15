@@ -3,6 +3,7 @@ package com.iremeber.rememberfriends.di
 import android.content.Context
 import androidx.room.Room
 import com.iremeber.rememberfriends.data.local.AllContacts
+import com.iremeber.rememberfriends.data.local.AllRingtones
 import com.iremeber.rememberfriends.data.local.ContactDao
 import com.iremeber.rememberfriends.data.local.ContactDb
 import com.iremeber.rememberfriends.data.repo.ContactRepository
@@ -40,8 +41,9 @@ object AppModule {
     fun provideRepository(
         dao: ContactDao,
         allContacts: AllContacts,
-        @ApplicationContext context: Context
-    ) = ContactRepository(dao, allContacts, context) as ContactRepositoryInterface
+        @ApplicationContext context: Context,
+        allRingtones: AllRingtones
+    ) = ContactRepository(dao, allContacts, context, allRingtones) as ContactRepositoryInterface
 
     @Singleton
     @Provides

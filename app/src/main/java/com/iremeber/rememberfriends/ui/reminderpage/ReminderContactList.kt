@@ -2,6 +2,8 @@ package com.iremeber.rememberfriends.ui.reminderpage
 
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,8 +35,10 @@ class ReminderContactList : Fragment() {
     private lateinit var utils: UtilsWithContext
     private lateinit var alarmManagerImpl: AlarmManagerImpl
     private var requestCode = 0
+    private var changeObserver = 0
 
     private var systemLanguage = "en"
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,11 +54,13 @@ class ReminderContactList : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         systemLanguage = Locale.getDefault().language
+        viewModel.getDataFromDataStore(REQUEST_CODE_PREFERENCE_KEY)
         initObjects()
-        flipCard()
         observe()
+        editTextClicker()
         deleteFavoriteModelItem()
         showDateTimeDialog()
+        flipCard()
     }
 
     private fun observe() {
@@ -71,6 +77,7 @@ class ReminderContactList : Fragment() {
     }
     private fun showDateTimeDialog() {
         recyclerAdapter.setTextClickListener { view ->
+            changeObserver = 1
             when (view.id) {
                 R.id.editorDateCardBack -> {
                     utils.showDatePickerDialog(view, childFragmentManager)
@@ -84,6 +91,29 @@ class ReminderContactList : Fragment() {
             }
         }
     }
+    private fun editTextClicker() {
+        recyclerAdapter.setEditTextClickListener { view ->
+            view.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                    changeObserver = 1
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    changeObserver = 1
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                    changeObserver = 1
+                }
+
+            })
+        }
+    }
 
     private fun flipCard() {
         recyclerAdapter.setEditorIconClickListener { model, viewFront, viewBack ->
@@ -92,15 +122,15 @@ class ReminderContactList : Fragment() {
                     utils.flipCard(requireContext(), viewFront, viewBack)
                 }
                 R.id.frontOfCard -> {
-                    val updateDate =
-                        requireActivity().findViewById<TextView>(R.id.editorDateCardBack).text.toString()
+                    val updateDate = requireActivity().findViewById<TextView>(R.id.editorDateCardBack).text.toString()
                     var updateInterval =
                         requireActivity().findViewById<EditText>(R.id.editorIntervalCardBack).text.toString()
                     val updateBeginHour =
                         requireActivity().findViewById<TextView>(R.id.editorHourStartCardBack).text.toString()
                     val updateEndHour =
                         requireActivity().findViewById<TextView>(R.id.editorHourEndCardBack).text.toString()
-                    requestCode = model.requestCode + 1
+                    requestCode += 1
+
                     viewModel.saveToDataStore(REQUEST_CODE_PREFERENCE_KEY, requestCode)
                     val messageDate = updateDate.split("/")
                     val updateMessage = when {
@@ -142,28 +172,32 @@ class ReminderContactList : Fragment() {
                             }
                         }
                     }
-                    viewModel.updateFavoriteContactList(
-                        date = updateDate,
-                        interval = updateInterval,
-                        beginHour = updateBeginHour,
-                        endHour = updateEndHour,
-                        requestCode = requestCode,
-                        dateMessage = updateMessage,
-                        intervalMessage = updateIntervalMessage,
-                        updateRequestCode = model.updateRequestCode
-                    )
+
                     val alarmHour =
                         (updateBeginHour.split(":")[0].toInt() + updateEndHour.split(":")[0].toInt()) / 2
                     val alarmMinute =
                         (updateBeginHour.split(":")[1].toInt() + updateEndHour.split(":")[1].toInt()) / 2
                     val timeOfAlarm = utils.convertToTimeInMillis(alarmMinute, alarmHour,
                         messageDate[0].toInt(), messageDate[1].toInt() - 1, messageDate[2].toInt())
-
-                    viewModel.updateScheduleAlarmModel(
-                        newTimeInMillis = timeOfAlarm, requestCode = requestCode,
-                        interval = updateInterval.toInt(), updateRequestCode = model.updateRequestCode
-                    )
+                    if (changeObserver == 1) {
+                        viewModel.updateFavoriteContactList(
+                            date = updateDate,
+                            interval = updateInterval,
+                            beginHour = updateBeginHour,
+                            endHour = updateEndHour,
+                            requestCode = requestCode,
+                            dateMessage = updateMessage,
+                            intervalMessage = updateIntervalMessage,
+                            updateRequestCode = model.updateRequestCode
+                        )
+                        viewModel.updateScheduleAlarmModel(
+                            newTimeInMillis = timeOfAlarm, requestCode = requestCode,
+                            interval = updateInterval.toInt(), updateRequestCode = model.updateRequestCode
+                        )
+                        changeObserver = 0
+                    }
                     if (System.currentTimeMillis() < timeOfAlarm) {
+
                         alarmManagerImpl.cancelAlarm(model.requestCode)
                         alarmManagerImpl.setAlarm(
                             timeInMillis = timeOfAlarm, requestCode = requestCode,
