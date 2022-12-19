@@ -25,11 +25,10 @@ interface ContactDao {
     fun getAllFromFavorites(): LiveData<List<FavoriteContactModel>>
     @Query("UPDATE FavoriteContactModel SET date =:date, interval =:interval " +
             " , startHour =:beginHour , endHour =:endHour, dateMessage =:dateMessage, " +
-            "intervalMessage =:intervalMessage, requestCode =:requestCode WHERE updateRequestCode =:updateRequestCode")
+            "intervalMessage =:intervalMessage WHERE requestCode =:requestCode")
     suspend fun updateReminderCard(date: String,interval: String,beginHour: String,
                                    endHour:String,dateMessage: String,
-                                   intervalMessage: String, requestCode: Int,
-                                   updateRequestCode: Int)
+                                   intervalMessage: String, requestCode: Int)
     @Query("UPDATE FavoriteContactModel SET date =:date, dateMessage =:dateMessage WHERE requestCode =:requestCode")
     suspend fun updateReminderCardAfterAlarmTrigger(date: String, requestCode: Int, dateMessage: String)
     /**
@@ -37,13 +36,16 @@ interface ContactDao {
      */
     @Insert
     suspend fun saveToScheduleAlarm(scheduleAlarmModel: ScheduleAlarmModel)
+
     @Query("DELETE FROM ScheduleAlarmModel WHERE requestCode =:requestCode")
     suspend fun deleteFromScheduleAlarmModel(requestCode: Int)
+
     @Query("SELECT * FROM ScheduleAlarmModel")
     fun getAllFromScheduleAlarmModel(): List<ScheduleAlarmModel>
-    @Query("UPDATE ScheduleAlarmModel SET timInMillis =:newTimeInMillis, interval =:interval, requestCode =:requestCode WHERE updateRequestCode =:updateRequestCode")
-    suspend fun updateScheduleAlarm(newTimeInMillis: Long, requestCode: Int, interval: Int,
-                                    updateRequestCode: Int)
+
+    @Query("UPDATE ScheduleAlarmModel SET timInMillis =:newTimeInMillis, interval =:interval WHERE requestCode =:requestCode")
+    suspend fun updateScheduleAlarm(newTimeInMillis: Long, requestCode: Int, interval: Int)
+
     @Query("UPDATE ScheduleAlarmModel SET timInMillis =:newTimeInMillis, interval =:interval WHERE requestCode =:requestCode")
     suspend fun updateScheduleAlarmAfterAlarmTrigger(newTimeInMillis: Long, requestCode: Int, interval: Int)
 }

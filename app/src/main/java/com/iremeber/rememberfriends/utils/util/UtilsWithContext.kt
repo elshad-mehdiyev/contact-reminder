@@ -17,7 +17,6 @@ import java.util.*
 
 class UtilsWithContext(val context: Context) {
 
-
     fun getHourAndMinute(): String {
         val utc = Calendar.getInstance()
         val hour = utc.get(Calendar.HOUR_OF_DAY)

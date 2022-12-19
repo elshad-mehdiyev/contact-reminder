@@ -16,15 +16,10 @@ import kotlinx.coroutines.launch
 class AlarmManagerImpl (
     val context: Context,
 ) {
-
-
     private val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     private val job = CoroutineScope(SupervisorJob())
     private var scheduleAlarmList = listOf<ScheduleAlarmModel>()
     private val intent = Intent(context, ExactAlarmBroadCastReceiver::class.java)
-
-
-
 
     fun canScheduleExactAlarms(): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -76,12 +71,11 @@ class AlarmManagerImpl (
         intent.putExtra("requestCode", encodeRequestCode)
         intent.putExtra("interval", encodeInterval)
         intent.putExtra("message", message)
-        println(requestCode)
         return PendingIntent.getBroadcast(
             context,
             requestCode,
             intent,
-            PendingIntent.FLAG_IMMUTABLE
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
     }
     fun cancelAlarm(requestCode: Int) {
@@ -89,7 +83,7 @@ class AlarmManagerImpl (
             context,
             requestCode,
             intent,
-            PendingIntent.FLAG_IMMUTABLE
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
         alarmManager.cancel(pendingIntent)
     }

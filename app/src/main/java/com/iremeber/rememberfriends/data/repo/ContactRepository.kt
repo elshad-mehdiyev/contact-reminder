@@ -60,10 +60,9 @@ class ContactRepository @Inject constructor(
         endHour: String,
         dateMessage: String,
         intervalMessage: String,
-        requestCode: Int,
-        updateRequestCode: Int
+        requestCode: Int
     ) {
-        dao.updateReminderCard(date, interval, beginHour, endHour,dateMessage, intervalMessage, requestCode, updateRequestCode)
+        dao.updateReminderCard(date, interval, beginHour, endHour,dateMessage, intervalMessage, requestCode)
     }
 
     override suspend fun updateReminderCardAfterAlarmTrigger(date: String, requestCode: Int, dateMessage: String) {
@@ -85,8 +84,8 @@ class ContactRepository @Inject constructor(
         return dao.getAllFromScheduleAlarmModel()
     }
 
-    override suspend fun updateScheduleAlarm(newTimeInMillis: Long, requestCode: Int, interval: Int, updateRequestCode: Int) {
-        dao.updateScheduleAlarm(newTimeInMillis, requestCode, interval, updateRequestCode)
+    override suspend fun updateScheduleAlarm(newTimeInMillis: Long, requestCode: Int, interval: Int) {
+        dao.updateScheduleAlarm(newTimeInMillis, requestCode, interval)
     }
 
     override suspend fun updateScheduleAlarmAfterAlarmTrigger(

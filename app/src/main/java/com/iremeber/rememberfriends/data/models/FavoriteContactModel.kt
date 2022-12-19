@@ -16,6 +16,5 @@ data class FavoriteContactModel(
     val dateMessage: String,
     val intervalMessage: String,
     val startHour: String,
-    val endHour: String,
-    val updateRequestCode: Int
+    val endHour: String
 )

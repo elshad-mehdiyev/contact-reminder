@@ -28,7 +28,7 @@ interface ContactRepositoryInterface {
     fun getAllFromFavorites(): LiveData<List<FavoriteContactModel>>
     suspend fun updateReminderCard(date: String,interval: String,beginHour: String,
                                    endHour:String,dateMessage: String,
-                                   intervalMessage: String, requestCode: Int,updateRequestCode: Int)
+                                   intervalMessage: String, requestCode: Int)
     suspend fun updateReminderCardAfterAlarmTrigger(date: String, requestCode: Int, dateMessage: String)
     /**
      * ScheduleAlarmModel
@@ -39,7 +39,7 @@ interface ContactRepositoryInterface {
 
     fun getAllFromScheduleAlarmModel(): List<ScheduleAlarmModel>
 
-    suspend fun updateScheduleAlarm(newTimeInMillis: Long, requestCode: Int, interval: Int, updateRequestCode: Int)
+    suspend fun updateScheduleAlarm(newTimeInMillis: Long, requestCode: Int, interval: Int)
 
     suspend fun updateScheduleAlarmAfterAlarmTrigger(newTimeInMillis: Long, requestCode: Int, interval: Int)
 

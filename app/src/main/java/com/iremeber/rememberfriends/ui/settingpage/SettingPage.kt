@@ -52,7 +52,6 @@ class SettingPage : Fragment() {
             }
         }
         viewModel.ringtonesListData.observe(viewLifecycleOwner) { ringtones ->
-            println("assda")
             ringtones?.let {
                 println(it[0].title)
             }

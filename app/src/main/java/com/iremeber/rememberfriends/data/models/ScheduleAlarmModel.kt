@@ -10,6 +10,5 @@ data class ScheduleAlarmModel(
     val timInMillis: Long,
     val requestCode: Int,
     val message: String,
-    val interval: Int,
-    val updateRequestCode: Int
+    val interval: Int
 )

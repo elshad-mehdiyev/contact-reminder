@@ -74,11 +74,10 @@ class ContactListViewModel @Inject constructor(
                                   endHour: String,
                                   dateMessage: String,
                                   intervalMessage: String,
-                                  requestCode: Int,
-                                  updateRequestCode: Int) {
+                                  requestCode: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             repositoryInterface.updateReminderCard(date, interval, beginHour, endHour,
-                dateMessage, intervalMessage, requestCode, updateRequestCode)
+                dateMessage, intervalMessage, requestCode)
         }
     }
     fun saveToScheduleAlarmModel(scheduleAlarmModel: ScheduleAlarmModel) {
@@ -91,9 +90,9 @@ class ContactListViewModel @Inject constructor(
             repositoryInterface.deleteFromScheduleAlarmModel(requestCode)
         }
     }
-    fun updateScheduleAlarmModel(newTimeInMillis: Long, requestCode: Int, interval: Int, updateRequestCode: Int) {
+    fun updateScheduleAlarmModel(newTimeInMillis: Long, requestCode: Int, interval: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            repositoryInterface.updateScheduleAlarm(newTimeInMillis, requestCode, interval, updateRequestCode)
+            repositoryInterface.updateScheduleAlarm(newTimeInMillis, requestCode, interval )
         }
     }
     fun saveToDataStore(key: String, value: Int) {

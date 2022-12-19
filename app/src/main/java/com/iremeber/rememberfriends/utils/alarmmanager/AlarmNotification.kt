@@ -11,15 +11,7 @@ import androidx.core.app.NotificationCompat
 import com.iremeber.rememberfriends.R
 import com.iremeber.rememberfriends.di.HiltAndroidApp
 import com.iremeber.rememberfriends.ui.MainActivity
-import java.text.SimpleDateFormat
-import java.util.*
 
-fun getDate(milliSeconds: Long, dateFormat: String): String {
-    val formatter = SimpleDateFormat(dateFormat, Locale.getDefault())
-    val calendar: Calendar = Calendar.getInstance()
-    calendar.timeInMillis = milliSeconds
-    return formatter.format(calendar.time)
-}
 fun showNotification(
     context: Context,
     channelId: String,
