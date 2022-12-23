@@ -6,8 +6,7 @@ import com.iremeber.rememberfriends.data.local.AllContacts
 import com.iremeber.rememberfriends.data.local.AllRingtones
 import com.iremeber.rememberfriends.data.local.ContactDao
 import com.iremeber.rememberfriends.data.local.ContactDb
-import com.iremeber.rememberfriends.data.repo.ContactRepository
-import com.iremeber.rememberfriends.data.repo.ContactRepositoryInterface
+import com.iremeber.rememberfriends.data.repo.*
 import com.iremeber.rememberfriends.utils.util.Constants.DB_NAME
 import dagger.Module
 import dagger.Provides
@@ -38,12 +37,28 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideRepository(
+    fun provideReminderCardRepository(
         dao: ContactDao,
+    ) = ReminderCardRepository(dao) as IRepository
+
+    @Singleton
+    @Provides
+    fun provideDeviceRepository(
         allContacts: AllContacts,
-        @ApplicationContext context: Context,
         allRingtones: AllRingtones
-    ) = ContactRepository(dao, allContacts, context, allRingtones) as ContactRepositoryInterface
+    ) = DeviceRepository(allContacts, allRingtones) as IRepository
+
+    @Singleton
+    @Provides
+    fun providePreferenceRepository(
+        @ApplicationContext context: Context,
+    ) = PreferenceRepository(context) as IRepository
+
+    @Singleton
+    @Provides
+    fun provideScheduleRepository(
+        dao: ContactDao,
+    ) = ScheduleReminderRepository(dao) as IRepository
 
     @Singleton
     @Provides

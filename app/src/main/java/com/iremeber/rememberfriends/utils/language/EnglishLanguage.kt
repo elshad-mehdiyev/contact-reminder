@@ -3,7 +3,7 @@ package com.iremeber.rememberfriends.utils.language
 import com.iremeber.rememberfriends.data.models.AllContactModel
 import com.iremeber.rememberfriends.utils.util.UtilsWithContext
 
-class EnglishLanguage: Language {
+class EnglishLanguage : Language {
     override fun displayReminderForContactText(
         allContactModel: AllContactModel
     ): String {

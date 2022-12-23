@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import com.iremeber.rememberfriends.R
 import com.iremeber.rememberfriends.di.HiltAndroidApp
-import com.iremeber.rememberfriends.data.repo.ContactRepository
+import com.iremeber.rememberfriends.data.repo.ReminderCardRepository
 import com.iremeber.rememberfriends.utils.util.Constants.MUSIC_ON_PREFERENCE_KEY
 import com.iremeber.rememberfriends.utils.util.Constants.NOTIFICATION_CHANNEL_ID
 import com.iremeber.rememberfriends.utils.util.Constants.NOTIFICATION_CHANNEL_NAME
@@ -23,7 +23,7 @@ import com.iremeber.rememberfriends.utils.util.CommonUtil.getDate
 class ExactAlarmBroadCastReceiver : HiltBroadcastReceiver() {
 
     @Inject
-    lateinit var repository: ContactRepository
+    lateinit var repository: ReminderCardRepository
     private val job = CoroutineScope(SupervisorJob())
     private var systemLanguage = "en"
     private lateinit var utils: UtilsWithContext

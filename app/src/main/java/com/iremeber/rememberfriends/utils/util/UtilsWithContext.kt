@@ -25,6 +25,7 @@ class UtilsWithContext(val context: Context) {
         val formatMinute = if (minute < 10) "0$minute" else minute.toString()
         return "$formatHour:$formatMinute"
     }
+
     fun getDate(): String {
         val calendar = Calendar.getInstance()
         val format = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
@@ -40,17 +41,18 @@ class UtilsWithContext(val context: Context) {
         calendar.set(Calendar.YEAR, year)
         return calendar.timeInMillis
     }
+
     fun showDatePickerDialog(textView: TextView, manager: FragmentManager) {
         val materialDateBuilder: MaterialDatePicker.Builder<*> =
             MaterialDatePicker.Builder.datePicker()
         materialDateBuilder.setTitleText(context.getString(R.string.select_date_text))
         val materialDatePicker = materialDateBuilder.build()
-        materialDatePicker.show(manager,context.getString(R.string.select_date_text))
+        materialDatePicker.show(manager, context.getString(R.string.select_date_text))
         materialDatePicker.addOnPositiveButtonClickListener {
             val utc = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
             utc.timeInMillis = it as Long
             val format = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-            val formatted= format.format(utc.time)
+            val formatted = format.format(utc.time)
             textView.text = formatted
         }
     }
@@ -71,8 +73,9 @@ class UtilsWithContext(val context: Context) {
             }
         }
     }
+
     fun formatMonth(month: String?): String {
-        return when(month) {
+        return when (month) {
             "01" -> context.getString(R.string.january)
             "02" -> context.getString(R.string.february)
             "03" -> context.getString(R.string.mart)

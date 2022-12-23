@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Remember Friends</string>
+    <string name="app_name">Arkadaşları  hatırla</string>
     <string name="rationale_for_permission">"Kişileri görüntülemek için izin gereklidir. "</string>
     <string name="january">ocak</string>
     <string name="february">şubat</string>

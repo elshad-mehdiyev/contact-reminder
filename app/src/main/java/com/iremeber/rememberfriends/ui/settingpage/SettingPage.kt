@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.iremeber.rememberfriends.databinding.SettingPageBinding
-import com.iremeber.rememberfriends.ui.viewmodel.ContactListViewModel
 import com.iremeber.rememberfriends.utils.util.Constants.MUSIC_ON_PREFERENCE_KEY
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -15,7 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class SettingPage : Fragment() {
     private var _binding: SettingPageBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: ContactListViewModel by viewModels()
+    private val viewModel: SettingPageViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

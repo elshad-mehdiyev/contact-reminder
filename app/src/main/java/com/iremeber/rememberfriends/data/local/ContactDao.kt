@@ -4,16 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.iremeber.rememberfriends.data.models.AllContactModel
 import com.iremeber.rememberfriends.data.models.FavoriteContactModel
 import com.iremeber.rememberfriends.data.models.ScheduleAlarmModel
 
 @Dao
 interface ContactDao {
-    @Insert
-    suspend fun saveContacts(list: List<AllContactModel>)
-    @Query("SELECT * FROM AllContactModel ORDER BY name ASC")
-    fun getAllContacts(): LiveData<List<AllContactModel>>
     /**
      * FavoriteContact  table
      */

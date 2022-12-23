@@ -16,9 +16,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.iremeber.rememberfriends.R
 import com.iremeber.rememberfriends.data.models.AllContactModel
+import com.iremeber.rememberfriends.data.models.FavoriteContactModel
 import com.iremeber.rememberfriends.data.models.ScheduleAlarmModel
 import com.iremeber.rememberfriends.databinding.ReminderContactListBinding
-import com.iremeber.rememberfriends.ui.viewmodel.ContactListViewModel
 import com.iremeber.rememberfriends.utils.alarmmanager.AlarmManagerImpl
 import com.iremeber.rememberfriends.utils.language.Language
 import com.iremeber.rememberfriends.utils.language.LanguageFactory
@@ -31,12 +31,18 @@ class ReminderContactList : Fragment() {
     private var _binding: ReminderContactListBinding? = null
     private val binding get() = _binding!!
     private val recyclerAdapter = ReminderContactListAdapter()
-    private val viewModel: ContactListViewModel by viewModels()
+    private val viewModel: ReminderContactViewModel by viewModels()
     private lateinit var utils: UtilsWithContext
     private lateinit var alarmManagerImpl: AlarmManagerImpl
     private var systemLanguage = "en"
     private lateinit var languageSelector: Language
-
+    private var updateDate = ""
+    private var updateInterval = ""
+    private var updateBeginHour = ""
+    private var updateEndHour = ""
+    private lateinit var messageDate: List<String>
+    private var updateMessage = ""
+    private var updateIntervalMessage = ""
 
 
     override fun onCreateView(
@@ -67,6 +73,7 @@ class ReminderContactList : Fragment() {
         }
 
     }
+
     private fun showDateTimeDialog() {
         recyclerAdapter.setTextClickListener { view ->
             when (view.id) {
@@ -83,6 +90,57 @@ class ReminderContactList : Fragment() {
         }
     }
 
+    private fun getUpdatedTextFromViews() {
+        updateDate =
+            requireActivity().findViewById<TextView>(R.id.editorDateCardBack).text.toString()
+        updateInterval =
+            requireActivity().findViewById<EditText>(R.id.editorIntervalCardBack).text.toString()
+        updateBeginHour =
+            requireActivity().findViewById<TextView>(R.id.editorHourStartCardBack).text.toString()
+        updateEndHour =
+            requireActivity().findViewById<TextView>(R.id.editorHourEndCardBack).text.toString()
+        messageDate = updateDate.split("/")
+        updateMessage = languageSelector.displayReminderCardDateText(messageDate, utils)
+        if (updateInterval.isEmpty()) updateInterval = "0"
+        updateIntervalMessage =
+            languageSelector.displayReminderCardInterval(updateInterval)
+    }
+    private fun getTimeOfAlarm(): Long {
+        val alarmHour =
+            (updateBeginHour.split(":")[0].toInt() + updateEndHour.split(":")[0].toInt()) / 2
+        val alarmMinute =
+            (updateBeginHour.split(":")[1].toInt() + updateEndHour.split(":")[1].toInt()) / 2
+        return utils.convertToTimeInMillis(
+            alarmMinute, alarmHour,
+            messageDate[0].toInt(), messageDate[1].toInt() - 1, messageDate[2].toInt()
+        )
+    }
+    private fun updateFavoriteContactList(model: FavoriteContactModel) {
+        viewModel.updateFavoriteContactList(
+            date = updateDate,
+            interval = updateInterval,
+            beginHour = updateBeginHour,
+            endHour = updateEndHour,
+            requestCode = model.requestCode,
+            dateMessage = updateMessage,
+            intervalMessage = updateIntervalMessage
+        )
+    }
+    private fun updateScheduleAlarmModel(model: FavoriteContactModel) {
+        viewModel.updateScheduleAlarmModel(
+            newTimeInMillis = getTimeOfAlarm() , requestCode = model.requestCode,
+            interval = updateInterval.toInt()
+        )
+    }
+    private fun updateAlarm(model: FavoriteContactModel) {
+        if (System.currentTimeMillis() < getTimeOfAlarm()) {
+            alarmManagerImpl.cancelAlarm(model.requestCode)
+            alarmManagerImpl.setAlarm(
+                timeInMillis = getTimeOfAlarm(), requestCode = model.requestCode,
+                interval = updateInterval.toInt(), message = updateMessage
+            )
+        }
+    }
     private fun flipCard() {
         recyclerAdapter.setEditorIconClickListener { model, viewFront, viewBack ->
             when (viewFront.id) {
@@ -90,52 +148,29 @@ class ReminderContactList : Fragment() {
                     utils.flipCard(requireContext(), viewFront, viewBack)
                 }
                 R.id.frontOfCard -> {
-                    val updateDate = requireActivity().findViewById<TextView>(R.id.editorDateCardBack).text.toString()
-                    var updateInterval =
-                        requireActivity().findViewById<EditText>(R.id.editorIntervalCardBack).text.toString()
-                    val updateBeginHour =
-                        requireActivity().findViewById<TextView>(R.id.editorHourStartCardBack).text.toString()
-                    val updateEndHour =
-                        requireActivity().findViewById<TextView>(R.id.editorHourEndCardBack).text.toString()
-                    val messageDate = updateDate.split("/")
-                    val updateMessage = languageSelector.displayReminderCardDateText(messageDate,utils)
-                    if (updateInterval.isEmpty()) updateInterval = "0"
-                    val updateIntervalMessage = languageSelector.displayReminderCardInterval(updateInterval)
-
-                    val alarmHour =
-                        (updateBeginHour.split(":")[0].toInt() + updateEndHour.split(":")[0].toInt()) / 2
-                    val alarmMinute =
-                        (updateBeginHour.split(":")[1].toInt() + updateEndHour.split(":")[1].toInt()) / 2
-                    val timeOfAlarm = utils.convertToTimeInMillis(alarmMinute, alarmHour,
-                        messageDate[0].toInt(), messageDate[1].toInt() - 1, messageDate[2].toInt())
-                        viewModel.updateFavoriteContactList(
-                            date = updateDate,
-                            interval = updateInterval,
-                            beginHour = updateBeginHour,
-                            endHour = updateEndHour,
-                            requestCode = model.requestCode,
-                            dateMessage = updateMessage,
-                            intervalMessage = updateIntervalMessage
-                        )
-                        viewModel.updateScheduleAlarmModel(
-                            newTimeInMillis = timeOfAlarm, requestCode = model.requestCode,
-                            interval = updateInterval.toInt()
-                        )
-                    if (System.currentTimeMillis() < timeOfAlarm) {
-
-                        alarmManagerImpl.cancelAlarm(model.requestCode)
-                        alarmManagerImpl.setAlarm(
-                            timeInMillis = timeOfAlarm, requestCode = model.requestCode,
-                            interval = updateInterval.toInt(), message = updateMessage
-                        )
-                    }
+                    getUpdatedTextFromViews()
+                    updateFavoriteContactList(model)
+                    updateScheduleAlarmModel(model)
+                    updateAlarm(model)
                     utils.flipCard(requireContext(), viewFront, viewBack)
                 }
             }
         }
     }
+
+    private fun getTimeOfMillisForUndoReminderCard(favoriteModel: FavoriteContactModel): Long {
+        val messageDate = favoriteModel.date.split("/")
+        val alarmHour =
+            (favoriteModel.startHour.split(":")[0].toInt() + favoriteModel.endHour.split(":")[0].toInt()) / 2
+        val alarmMinute =
+            (favoriteModel.startHour.split(":")[1].toInt() + favoriteModel.endHour.split(":")[1].toInt()) / 2
+        return utils.convertToTimeInMillis(
+            alarmMinute, alarmHour,
+            messageDate[0].toInt(), messageDate[1].toInt() - 1, messageDate[2].toInt()
+        )
+    }
     private fun deleteFavoriteModelItem() {
-        val itemTouchHelper = object: ItemTouchHelper.SimpleCallback(
+        val itemTouchHelper = object : ItemTouchHelper.SimpleCallback(
             ItemTouchHelper.UP or ItemTouchHelper.DOWN,
             ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
         ) {
@@ -150,29 +185,36 @@ class ReminderContactList : Fragment() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
 
                 val position = viewHolder.bindingAdapterPosition
+
                 val favoriteModel = recyclerAdapter.reminderAdapterList[position]
 
                 viewModel.deleteFromFavoriteContactList(favoriteModel.requestCode)
+
                 viewModel.deleteFromScheduleAlarmModel(favoriteModel.requestCode)
+
                 alarmManagerImpl.cancelAlarm(favoriteModel.requestCode)
 
-                val messageDate = favoriteModel.date.split("/")
-                val alarmHour =
-                    (favoriteModel.startHour.split(":")[0].toInt() + favoriteModel.endHour.split(":")[0].toInt()) / 2
-                val alarmMinute =
-                    (favoriteModel.startHour.split(":")[1].toInt() + favoriteModel.endHour.split(":")[1].toInt()) / 2
-                val timeOfAlarm = utils.convertToTimeInMillis(alarmMinute, alarmHour,
-                    messageDate[0].toInt(), messageDate[1].toInt() - 1, messageDate[2].toInt())
+                val timeOfAlarm = getTimeOfMillisForUndoReminderCard(favoriteModel)
+
 
                 val allContactModel = AllContactModel(
-                    id = favoriteModel.id, name = favoriteModel.name, firstLetter = favoriteModel.firstLetter
+                    id = favoriteModel.id,
+                    name = favoriteModel.name,
+                    firstLetter = favoriteModel.firstLetter
                 )
                 val message = languageSelector.displayNotificationText(allContactModel)
 
-                val scheduleAlarmModel = ScheduleAlarmModel(timInMillis = timeOfAlarm,
-                    requestCode = favoriteModel.requestCode, interval = favoriteModel.interval.toInt(),
-                    message = message)
-                Snackbar.make(requireView(),getString(R.string.snackbar_delete_text),Snackbar.LENGTH_LONG).apply {
+                val scheduleAlarmModel = ScheduleAlarmModel(
+                    timInMillis = timeOfAlarm,
+                    requestCode = favoriteModel.requestCode,
+                    interval = favoriteModel.interval.toInt(),
+                    message = message
+                )
+                Snackbar.make(
+                    requireView(),
+                    getString(R.string.snackbar_delete_text),
+                    Snackbar.LENGTH_LONG
+                ).apply {
                     setAction(getString(R.string.snackbar_undo)) {
                         viewModel.saveToFavoriteContactList(favoriteModel)
                         viewModel.saveToScheduleAlarmModel(scheduleAlarmModel)
@@ -187,6 +229,7 @@ class ReminderContactList : Fragment() {
         }
         observe()
     }
+
     private fun initObjects() {
         systemLanguage = Locale.getDefault().language
         utils = UtilsWithContext(requireContext())
@@ -195,6 +238,7 @@ class ReminderContactList : Fragment() {
         binding.recyclerReminderPage.adapter = recyclerAdapter
         languageSelector = LanguageFactory.languageForKey(systemLanguage)
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

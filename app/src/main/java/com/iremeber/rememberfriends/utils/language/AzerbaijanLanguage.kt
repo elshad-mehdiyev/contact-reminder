@@ -3,7 +3,7 @@ package com.iremeber.rememberfriends.utils.language
 import com.iremeber.rememberfriends.data.models.AllContactModel
 import com.iremeber.rememberfriends.utils.util.UtilsWithContext
 
-class AzerbaijanLanguage: Language {
+class AzerbaijanLanguage : Language {
     override fun displayReminderForContactText(
         allContactModel: AllContactModel
     ): String {
@@ -14,8 +14,10 @@ class AzerbaijanLanguage: Language {
         return "${allContactModel.name} ilə  əlaqə  saxlamaq  vaxtıdır."
     }
 
-    override fun displayReminderCardDateText(list: List<String>,
-                                             utilsWithContext: UtilsWithContext): String {
+    override fun displayReminderCardDateText(
+        list: List<String>,
+        utilsWithContext: UtilsWithContext
+    ): String {
         return "${list[0]} ${utilsWithContext.formatMonth(list[1])} " +
                 "${list[2]} tarixi üçün xatırladıcı planlaşdırılıb."
     }
