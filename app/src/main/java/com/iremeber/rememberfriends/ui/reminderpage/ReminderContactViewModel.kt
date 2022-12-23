@@ -4,7 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.iremeber.rememberfriends.data.models.FavoriteContactModel
 import com.iremeber.rememberfriends.data.models.ScheduleAlarmModel
-import com.iremeber.rememberfriends.data.repo.IRepository
+import com.iremeber.rememberfriends.data.repo.ReminderCardRepository
+import com.iremeber.rememberfriends.data.repo.ScheduleReminderRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -12,14 +13,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ReminderContactViewModel @Inject constructor(
-    private val repository: IRepository
+    private val reminderCardRepository: ReminderCardRepository,
+    private val scheduleReminderRepository: ScheduleReminderRepository
 ): ViewModel() {
 
-    val favoriteContactList = repository.getAllFromFavorites()
+    val favoriteContactList = reminderCardRepository.getAllFromFavorites()
 
     fun deleteFromFavoriteContactList(requestCode: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.deleteFromFavorites(requestCode)
+            reminderCardRepository.deleteFromFavorites(requestCode)
         }
     }
     fun updateFavoriteContactList(date: String,
@@ -30,29 +32,29 @@ class ReminderContactViewModel @Inject constructor(
                                   intervalMessage: String,
                                   requestCode: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.updateReminderCard(date, interval, beginHour, endHour,
+            reminderCardRepository.updateReminderCard(date, interval, beginHour, endHour,
                 dateMessage, intervalMessage, requestCode)
         }
     }
     fun deleteFromScheduleAlarmModel(requestCode: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.deleteFromScheduleAlarmModel(requestCode)
+            scheduleReminderRepository.deleteFromScheduleAlarmModel(requestCode)
         }
     }
     fun updateScheduleAlarmModel(newTimeInMillis: Long, requestCode: Int, interval: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.updateScheduleAlarm(newTimeInMillis, requestCode, interval )
+            scheduleReminderRepository.updateScheduleAlarm(newTimeInMillis, requestCode, interval )
         }
     }
     fun saveToFavoriteContactList(contactModel: FavoriteContactModel) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.saveToFavorites(contactModel)
+            reminderCardRepository.saveToFavorites(contactModel)
         }
     }
 
     fun saveToScheduleAlarmModel(scheduleAlarmModel: ScheduleAlarmModel) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.saveToScheduleAlarm(scheduleAlarmModel)
+            scheduleReminderRepository.saveToScheduleAlarm(scheduleAlarmModel)
         }
     }
 }

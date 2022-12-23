@@ -5,7 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.iremeber.rememberfriends.data.models.AllRingtonesModel
-import com.iremeber.rememberfriends.data.repo.IRepository
+import com.iremeber.rememberfriends.data.repo.DeviceRepository
+import com.iremeber.rememberfriends.data.repo.PreferenceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -14,7 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingPageViewModel @Inject constructor(
-    private val repository: IRepository
+    private val preferenceRepository: PreferenceRepository,
+    private val deviceRepository: DeviceRepository
 ): ViewModel() {
 
 
@@ -30,7 +32,7 @@ class SettingPageViewModel @Inject constructor(
 
     fun getRingtonesFromDevice() {
         viewModelScope.launch(Dispatchers.IO) {
-            val ringtonesListAsync = async { repository.getAllRingtonesFromDevice() }
+            val ringtonesListAsync = async { deviceRepository.getAllRingtonesFromDevice() }
             val ringtones = ringtonesListAsync.await()
             _ringtonesListData.postValue(ringtones)
         }
@@ -38,12 +40,12 @@ class SettingPageViewModel @Inject constructor(
 
     fun saveToDataStore(key: String, value: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.saveToDataStore(key, value)
+            preferenceRepository.saveToDataStore(key, value)
         }
     }
     fun getDataFromDataStore(key: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.getDataFromDataStore(key).collect {
+            preferenceRepository.getDataFromDataStore(key).collect {
                 _requestCodeFromDataStore.postValue(it)
             }
         }

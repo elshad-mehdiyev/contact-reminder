@@ -13,6 +13,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Qualifier
 import javax.inject.Singleton
 
 
@@ -39,26 +40,26 @@ object AppModule {
     @Provides
     fun provideReminderCardRepository(
         dao: ContactDao,
-    ) = ReminderCardRepository(dao) as IRepository
+    ) = ReminderCardRepository(dao)
 
     @Singleton
     @Provides
     fun provideDeviceRepository(
         allContacts: AllContacts,
         allRingtones: AllRingtones
-    ) = DeviceRepository(allContacts, allRingtones) as IRepository
+    ) = DeviceRepository(allContacts, allRingtones)
 
     @Singleton
     @Provides
     fun providePreferenceRepository(
         @ApplicationContext context: Context,
-    ) = PreferenceRepository(context) as IRepository
+    ) = PreferenceRepository(context)
 
     @Singleton
     @Provides
     fun provideScheduleRepository(
         dao: ContactDao,
-    ) = ScheduleReminderRepository(dao) as IRepository
+    ) = ScheduleReminderRepository(dao)
 
     @Singleton
     @Provides

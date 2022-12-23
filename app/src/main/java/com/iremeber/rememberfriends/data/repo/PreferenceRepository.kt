@@ -15,15 +15,15 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 
 class PreferenceRepository @Inject constructor(
     private val context: Context,
-    ): IRepository {
-    override suspend fun saveToDataStore(key: String, value: Int) {
+    ) {
+    suspend fun saveToDataStore(key: String, value: Int) {
         context.dataStore.edit {
             val preferenceKey = intPreferencesKey(key)
             it[preferenceKey] = value
         }
     }
 
-    override suspend fun getDataFromDataStore(key: String): Flow<Int> =
+    fun getDataFromDataStore(key: String): Flow<Int> =
         context.dataStore.data.map { dataStore ->
             val preferenceKey = intPreferencesKey(key)
             dataStore[preferenceKey] ?: 0

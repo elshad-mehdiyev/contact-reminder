@@ -8,17 +8,17 @@ import javax.inject.Inject
 
 class ReminderCardRepository @Inject constructor(
     private val dao: ContactDao
-): IRepository {
-    override suspend fun saveToFavorites(contact: FavoriteContactModel) {
+) {
+    suspend fun saveToFavorites(contact: FavoriteContactModel) {
         dao.saveToFavorites(contact)
     }
-    override suspend fun deleteFromFavorites(requestCode: Int) {
+    suspend fun deleteFromFavorites(requestCode: Int) {
         dao.deleteFromFavorites(requestCode)
     }
-    override fun getAllFromFavorites(): LiveData<List<FavoriteContactModel>> {
+    fun getAllFromFavorites(): LiveData<List<FavoriteContactModel>> {
         return dao.getAllFromFavorites()
     }
-    override suspend fun updateReminderCard(
+    suspend fun updateReminderCard(
         date: String,
         interval: String,
         beginHour: String,
@@ -29,7 +29,7 @@ class ReminderCardRepository @Inject constructor(
     ) {
         dao.updateReminderCard(date, interval, beginHour, endHour,dateMessage, intervalMessage, requestCode)
     }
-    override suspend fun updateReminderCardAfterAlarmTrigger(date: String, requestCode: Int, dateMessage: String) {
+    suspend fun updateReminderCardAfterAlarmTrigger(date: String, requestCode: Int, dateMessage: String) {
         dao.updateReminderCardAfterAlarmTrigger(date, requestCode, dateMessage)
     }
 }

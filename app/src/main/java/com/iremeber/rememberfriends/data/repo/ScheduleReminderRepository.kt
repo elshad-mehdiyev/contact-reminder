@@ -6,24 +6,24 @@ import javax.inject.Inject
 
 class ScheduleReminderRepository @Inject constructor(
     private val dao: ContactDao
-): IRepository {
-    override suspend fun saveToScheduleAlarm(scheduleAlarmModel: ScheduleAlarmModel) {
+) {
+    suspend fun saveToScheduleAlarm(scheduleAlarmModel: ScheduleAlarmModel) {
         dao.saveToScheduleAlarm(scheduleAlarmModel)
     }
 
-    override suspend fun deleteFromScheduleAlarmModel(requestCode: Int) {
+    suspend fun deleteFromScheduleAlarmModel(requestCode: Int) {
         dao.deleteFromScheduleAlarmModel(requestCode)
     }
 
-    override fun getAllFromScheduleAlarmModel(): List<ScheduleAlarmModel> {
+    fun getAllFromScheduleAlarmModel(): List<ScheduleAlarmModel> {
         return dao.getAllFromScheduleAlarmModel()
     }
 
-    override suspend fun updateScheduleAlarm(newTimeInMillis: Long, requestCode: Int, interval: Int) {
+    suspend fun updateScheduleAlarm(newTimeInMillis: Long, requestCode: Int, interval: Int) {
         dao.updateScheduleAlarm(newTimeInMillis, requestCode, interval)
     }
 
-    override suspend fun updateScheduleAlarmAfterAlarmTrigger(
+    suspend fun updateScheduleAlarmAfterAlarmTrigger(
         newTimeInMillis: Long,
         requestCode: Int,
         interval: Int

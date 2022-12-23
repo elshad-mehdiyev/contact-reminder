@@ -16,6 +16,8 @@ import kotlinx.coroutines.flow.collectLatest
 import java.util.*
 import javax.inject.Inject
 import android.util.Base64
+import com.iremeber.rememberfriends.data.repo.PreferenceRepository
+import com.iremeber.rememberfriends.data.repo.ScheduleReminderRepository
 import com.iremeber.rememberfriends.utils.util.CommonUtil.getDate
 
 
@@ -23,7 +25,11 @@ import com.iremeber.rememberfriends.utils.util.CommonUtil.getDate
 class ExactAlarmBroadCastReceiver : HiltBroadcastReceiver() {
 
     @Inject
-    lateinit var repository: ReminderCardRepository
+    lateinit var reminderCardRepository: ReminderCardRepository
+    @Inject
+    lateinit var preferenceRepository: PreferenceRepository
+    @Inject
+    lateinit var scheduleReminderRepository: ScheduleReminderRepository
     private val job = CoroutineScope(SupervisorJob())
     private var systemLanguage = "en"
     private lateinit var utils: UtilsWithContext
@@ -44,7 +50,7 @@ class ExactAlarmBroadCastReceiver : HiltBroadcastReceiver() {
         val newTimeInMillis = decodeTimeInMillis + (decodeInterval.toLong() * 24 * 60 * 60 * 1000)
         var musicOn = 0
         job.launch(Dispatchers.IO) {
-            repository.getDataFromDataStore(MUSIC_ON_PREFERENCE_KEY).collectLatest {
+            preferenceRepository.getDataFromDataStore(MUSIC_ON_PREFERENCE_KEY).collectLatest {
                 it.let {
                     musicOn = it
                 }
@@ -74,13 +80,13 @@ class ExactAlarmBroadCastReceiver : HiltBroadcastReceiver() {
             }
 
             job.launch(Dispatchers.IO) {
-                repository.updateReminderCardAfterAlarmTrigger(date, decodeRequestCode, updateMessage)
-                repository.updateScheduleAlarmAfterAlarmTrigger(newTimeInMillis, decodeRequestCode, decodeInterval)
+                reminderCardRepository.updateReminderCardAfterAlarmTrigger(date, decodeRequestCode, updateMessage)
+                scheduleReminderRepository.updateScheduleAlarmAfterAlarmTrigger(newTimeInMillis, decodeRequestCode, decodeInterval)
             }
         } else {
             job.launch(Dispatchers.IO) {
-                repository.deleteFromScheduleAlarmModel(decodeRequestCode)
-                repository.deleteFromFavorites(decodeRequestCode)
+                scheduleReminderRepository.deleteFromScheduleAlarmModel(decodeRequestCode)
+                reminderCardRepository.deleteFromFavorites(decodeRequestCode)
             }
         }
         showNotification(

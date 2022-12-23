@@ -9,12 +9,12 @@ import javax.inject.Inject
 class DeviceRepository @Inject constructor(
     private val fetchContact: AllContacts,
     private val fetchRingtones: AllRingtones
-    ): IRepository  {
-    override suspend fun getContactFromDevice(): ArrayList<AllContactModel> {
+    )  {
+    fun getContactFromDevice(): ArrayList<AllContactModel> {
         return fetchContact.getPhoneContacts()
     }
 
-    override suspend fun getAllRingtonesFromDevice(): ArrayList<AllRingtonesModel> {
+    fun getAllRingtonesFromDevice(): ArrayList<AllRingtonesModel> {
         return fetchRingtones.getRingtonesList()
     }
 }
