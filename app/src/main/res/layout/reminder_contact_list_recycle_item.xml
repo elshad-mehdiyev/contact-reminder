@@ -5,7 +5,7 @@
     <data>
         <variable
             name="reminderList"
-            type="com.iremeber.rememberfriends.data.models.FavoriteContactModel" />
+            type="com.iremeber.rememberfriends.data.models.db_entities.FavoriteContactModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

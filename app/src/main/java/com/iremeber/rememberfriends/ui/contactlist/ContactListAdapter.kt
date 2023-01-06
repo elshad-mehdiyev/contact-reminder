@@ -7,11 +7,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.iremeber.rememberfriends.R
-import com.iremeber.rememberfriends.data.models.AllContactModel
+import com.iremeber.rememberfriends.data.models.device_entities.AllContactModel
 import com.iremeber.rememberfriends.databinding.ContactListRecycleItemBinding
 import com.iremeber.rememberfriends.utils.util.CommonUtil
-import kotlin.random.Random
 
 class ContactListAdapter: RecyclerView.Adapter<ContactListAdapter.ContactHolder>() {
     inner class ContactHolder(val binding: ContactListRecycleItemBinding): RecyclerView.ViewHolder(binding.root)

@@ -2,11 +2,10 @@ package com.iremeber.rememberfriends.data.local
 
 import android.app.Application
 import android.provider.ContactsContract
-import com.iremeber.rememberfriends.data.models.AllContactModel
+import com.iremeber.rememberfriends.data.models.device_entities.AllContactModel
 import javax.inject.Inject
 
 class AllContacts @Inject constructor(private val application: Application) {
-
     fun getPhoneContacts(): ArrayList<AllContactModel> {
         val contactsList = ArrayList<AllContactModel>()
         val contactsCursor = application.contentResolver?.query(

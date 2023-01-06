@@ -2,7 +2,10 @@ buildscript {
     ext.kotlin_version = "1.7.20"
     repositories {
         google()
-        maven { url 'https://jitpack.io' }
+        maven { url 'https://jitpack.io'}
+        maven {
+            url 'https://sdk.squareup.com/public/android'
+        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.3.1'

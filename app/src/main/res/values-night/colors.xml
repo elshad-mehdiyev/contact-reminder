@@ -15,5 +15,10 @@
     <color name="background_gradient_end_color">#2A2831</color>
     <color name="reminder_tint">#e7e5eb</color>
     <color name="first_letter_color">#FFFFFF</color>
+    <color name="splash_screen_main_background">#00194A</color>
+    <color name="splash_screen_second_background">#002A79</color>
+    <color name="splash_screen_icon_background">#0037A6</color>
+    <color name="splash_screen_icon_color">#cde3ef</color>
+    <color name="check_permission_background_color">#6750A4</color>
 
 </resources>

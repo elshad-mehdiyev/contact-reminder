@@ -38,4 +38,7 @@
     <string name="select_time_text">Vaxt  seçin</string>
     <string name="unknown_error">Bilinmeyen xeta</string>
     <string name="have_a_one_notification">Bir bildirişiniz  var</string>
+    <string name="permission_needed">İcazə Lazımdır</string>
+    <string name="permission_text">proqramdan istifadə etmək üçün mütləq  icazə  verilməlidir.</string>
+    <string name="allow_permission">İcazə  verin</string>
 </resources>

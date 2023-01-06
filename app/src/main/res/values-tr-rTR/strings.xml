@@ -38,4 +38,7 @@
     <string name="select_time_text">Zaman  seçin</string>
     <string name="unknown_error">Bilinmeyen  hata</string>
     <string name="have_a_one_notification">Bir  bildirimin var</string>
+    <string name="permission_needed">İzin Gerekli</string>
+    <string name="permission_text">uygulamayı kullanabilmek için izin verilmesi  gerekmektedir.</string>
+    <string name="allow_permission">İzin  ver</string>
 </resources>

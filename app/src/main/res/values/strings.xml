@@ -21,10 +21,10 @@
     <string name="interval">Interval</string>
     <string name="example">example: 3</string>
     <string name="clock_settings">Time Settings</string>
-    <string name="begining_hour">Begining</string>
+    <string name="begining_hour">Beginning</string>
     <string name="end_hour">End</string>
     <string name="date_setting">Date Settings</string>
-    <string name="cancel">cancel</string>
+    <string name="cancel">Cancel</string>
     <string name="create">create</string>
     <string name="reminder">Reminder</string>
     <string name="editor">Editor</string>
@@ -33,11 +33,14 @@
     <string name="reminder_navigatin_bar">Reminder</string>
     <string name="select_contacts_navigation_bar">Select Contact</string>
     <string name="setting_navigation_bar">Settings</string>
-    <string name="snackbar_delete_text">Succesfully  delete  item</string>
+    <string name="snackbar_delete_text">Successfully delete item</string>
     <string name="snackbar_undo">undo</string>
     <string name="select_date_text">SELECT A DATE</string>
     <string name="select_time_text">Select time</string>
     <string name="unknown_error">Unknown  error</string>
     <string name="have_a_one_notification">You have a notification</string>
+    <string name="permission_needed">Permission Needed</string>
+    <string name="permission_text">permission is required to be able to use the application.</string>
+    <string name="allow_permission">Allow permission</string>
 
 </resources>

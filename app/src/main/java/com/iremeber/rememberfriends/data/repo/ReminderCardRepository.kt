@@ -2,7 +2,7 @@ package com.iremeber.rememberfriends.data.repo
 
 import androidx.lifecycle.LiveData
 import com.iremeber.rememberfriends.data.local.ContactDao
-import com.iremeber.rememberfriends.data.models.FavoriteContactModel
+import com.iremeber.rememberfriends.data.models.db_entities.FavoriteContactModel
 import javax.inject.Inject
 
 

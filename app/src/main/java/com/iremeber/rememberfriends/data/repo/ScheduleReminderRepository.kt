@@ -1,7 +1,7 @@
 package com.iremeber.rememberfriends.data.repo
 
 import com.iremeber.rememberfriends.data.local.ContactDao
-import com.iremeber.rememberfriends.data.models.ScheduleAlarmModel
+import com.iremeber.rememberfriends.data.models.db_entities.ScheduleAlarmModel
 import javax.inject.Inject
 
 class ScheduleReminderRepository @Inject constructor(

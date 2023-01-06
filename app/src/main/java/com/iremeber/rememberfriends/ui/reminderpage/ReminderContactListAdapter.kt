@@ -2,8 +2,6 @@ package com.iremeber.rememberfriends.ui.reminderpage
 
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.iremeber.rememberfriends.data.models.FavoriteContactModel
+import com.iremeber.rememberfriends.data.models.db_entities.FavoriteContactModel
 import com.iremeber.rememberfriends.databinding.ReminderContactListRecycleItemBinding
 import com.iremeber.rememberfriends.utils.util.CommonUtil
 

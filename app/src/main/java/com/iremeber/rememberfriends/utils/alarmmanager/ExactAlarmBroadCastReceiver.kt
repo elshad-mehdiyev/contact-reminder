@@ -18,6 +18,7 @@ import javax.inject.Inject
 import android.util.Base64
 import com.iremeber.rememberfriends.data.repo.PreferenceRepository
 import com.iremeber.rememberfriends.data.repo.ScheduleReminderRepository
+import com.iremeber.rememberfriends.utils.language.LanguageFactory
 import com.iremeber.rememberfriends.utils.util.CommonUtil.getDate
 
 
@@ -37,6 +38,7 @@ class ExactAlarmBroadCastReceiver : HiltBroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
         systemLanguage = Locale.getDefault().language
+        val languageSelector = LanguageFactory.languageForKey(systemLanguage)
         utils = UtilsWithContext(context)
         val alarmManagerImpl = AlarmManagerImpl(context)
         val requestCode = intent.getByteArrayExtra("requestCode")
@@ -48,14 +50,7 @@ class ExactAlarmBroadCastReceiver : HiltBroadcastReceiver() {
         val decodeRequestCode = String(Base64.decode(requestCode,0)).toInt()
         val decodeInterval = String(Base64.decode(interval,0)).toInt()
         val newTimeInMillis = decodeTimeInMillis + (decodeInterval.toLong() * 24 * 60 * 60 * 1000)
-        var musicOn = 0
-        job.launch(Dispatchers.IO) {
-            preferenceRepository.getDataFromDataStore(MUSIC_ON_PREFERENCE_KEY).collectLatest {
-                it.let {
-                    musicOn = it
-                }
-            }
-        }
+
         if (decodeInterval > 0) {
             alarmManagerImpl.setAlarm(
                 timeInMillis = newTimeInMillis, requestCode = decodeRequestCode,
@@ -64,20 +59,7 @@ class ExactAlarmBroadCastReceiver : HiltBroadcastReceiver() {
             val date = getDate(newTimeInMillis, "dd/MM/yyyy")
             println(date)
             val messageDate = date.split("/")
-            val updateMessage = when {
-                systemLanguage.contains("az") -> {
-                    "${messageDate[0]} ${utils.formatMonth(messageDate[1])} " +
-                            "${messageDate[2]} tarixi üçün xatırladıcı planlaşdırılıb."
-                }
-                systemLanguage.contains("tr") -> {
-                    "${messageDate[0]} ${utils.formatMonth(messageDate[1])} " +
-                            "${messageDate[2]} tarihi için bir hatırlatıcı programlandı."
-                }
-                else -> {
-                    "A reminder is scheduled for the ${messageDate[0]} " +
-                            "${utils.formatMonth(messageDate[1])} " + messageDate[2]
-                }
-            }
+            val updateMessage = languageSelector.displayReminderCardDateText(messageDate, utils)
 
             job.launch(Dispatchers.IO) {
                 reminderCardRepository.updateReminderCardAfterAlarmTrigger(date, decodeRequestCode, updateMessage)
@@ -96,10 +78,19 @@ class ExactAlarmBroadCastReceiver : HiltBroadcastReceiver() {
             NOTIFICATION_ID,
             message
         )
-        if (musicOn == 1) {
-            (context.applicationContext as HiltAndroidApp).apply {
-                alarmRingtoneState.value = playRingtone(context)
+        job.launch(Dispatchers.IO) {
+            preferenceRepository.getDataFromDataStore(MUSIC_ON_PREFERENCE_KEY).collectLatest {
+                it.let {
+                    withContext(Dispatchers.Main) {
+                        if (it == 1) {
+                            (context.applicationContext as HiltAndroidApp).apply {
+                                alarmRingtoneState.value = playRingtone(context)
+                            }
+                        }
+                    }
+                }
             }
         }
+
     }
 }

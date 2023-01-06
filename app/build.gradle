@@ -14,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId "com.iremeber.rememberfriends"
-        minSdk 23
+        minSdk 24
         targetSdk 33
         versionCode 1
         versionName "1.0"
@@ -24,7 +24,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -65,8 +65,6 @@ dependencies {
     implementation 'pub.devrel:easypermissions:3.0.0'
 
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
-
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.5.1"
     implementation "androidx.lifecycle:lifecycle-runtime:2.5.1"
@@ -91,5 +89,5 @@ dependencies {
     implementation "androidx.datastore:datastore-preferences:1.0.0"
 
     implementation 'androidx.activity:activity-compose:1.6.1'
-
-}
+    def inAppPaymentsSdkVersion = '1.5.8'
+    implementation "com.squareup.sdk.in-app-payments:card-entry:$inAppPaymentsSdkVersion"}

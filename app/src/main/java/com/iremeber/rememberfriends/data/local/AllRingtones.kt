@@ -3,7 +3,7 @@ package com.iremeber.rememberfriends.data.local
 import android.content.Context
 import android.database.Cursor
 import android.media.RingtoneManager
-import com.iremeber.rememberfriends.data.models.AllRingtonesModel
+import com.iremeber.rememberfriends.data.models.device_entities.AllRingtonesModel
 import javax.inject.Inject
 
 

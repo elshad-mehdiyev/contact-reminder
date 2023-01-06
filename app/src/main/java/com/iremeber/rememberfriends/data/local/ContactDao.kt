@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.iremeber.rememberfriends.data.models.FavoriteContactModel
-import com.iremeber.rememberfriends.data.models.ScheduleAlarmModel
+import com.iremeber.rememberfriends.data.models.db_entities.FavoriteContactModel
+import com.iremeber.rememberfriends.data.models.db_entities.ScheduleAlarmModel
 
 @Dao
 interface ContactDao {

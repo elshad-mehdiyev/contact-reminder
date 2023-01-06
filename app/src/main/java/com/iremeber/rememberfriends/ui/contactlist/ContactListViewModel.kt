@@ -4,10 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.room.PrimaryKey
-import com.iremeber.rememberfriends.data.models.AllContactModel
-import com.iremeber.rememberfriends.data.models.FavoriteContactModel
-import com.iremeber.rememberfriends.data.models.ScheduleAlarmModel
+import com.iremeber.rememberfriends.data.models.device_entities.AllContactModel
+import com.iremeber.rememberfriends.data.models.db_entities.FavoriteContactModel
+import com.iremeber.rememberfriends.data.models.db_entities.ScheduleAlarmModel
 import com.iremeber.rememberfriends.data.repo.DeviceRepository
 import com.iremeber.rememberfriends.data.repo.PreferenceRepository
 import com.iremeber.rememberfriends.data.repo.ReminderCardRepository
@@ -37,33 +36,33 @@ class ContactListViewModel @Inject constructor(
 
 
     fun getContactFromDevice() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val contactsListAsync = async { deviceRepository.getContactFromDevice() }
             val contacts = contactsListAsync.await()
-            _contactListData.postValue(contacts)
+            _contactListData.value = contacts
         }
     }
     fun saveToFavoriteContactList(contactModel: FavoriteContactModel) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             reminderCardRepository.saveToFavorites(contactModel)
         }
     }
 
     fun saveToScheduleAlarmModel(scheduleAlarmModel: ScheduleAlarmModel) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             scheduleReminderRepository.saveToScheduleAlarm(scheduleAlarmModel)
         }
     }
 
     fun saveToDataStore(key: String, value: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             preferenceRepository.saveToDataStore(key, value)
         }
     }
     fun getDataFromDataStore(key: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             preferenceRepository.getDataFromDataStore(key).collect {
-                _requestCodeFromDataStore.postValue(it)
+                _requestCodeFromDataStore.value = it
             }
         }
     }

@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.iremeber.rememberfriends.data.models.AllContactModel
-import com.iremeber.rememberfriends.data.models.FavoriteContactModel
-import com.iremeber.rememberfriends.data.models.ScheduleAlarmModel
+import com.iremeber.rememberfriends.data.models.device_entities.AllContactModel
+import com.iremeber.rememberfriends.data.models.db_entities.FavoriteContactModel
+import com.iremeber.rememberfriends.data.models.db_entities.ScheduleAlarmModel
 import com.iremeber.rememberfriends.databinding.ContactListBinding
 import com.iremeber.rememberfriends.utils.alarmmanager.AlarmManagerImpl
 import com.iremeber.rememberfriends.utils.language.Language
@@ -28,7 +28,7 @@ class ContactList : Fragment() {
     private val contactListAdapter = ContactListAdapter()
     private lateinit var alarmManagerImpl: AlarmManagerImpl
     private lateinit var utils: UtilsWithContext
-    private var requestCode = 0
+    private var requestCode = 1000
     private var systemLanguage = "en"
     private lateinit var languageSelector: Language
     private var date = ""

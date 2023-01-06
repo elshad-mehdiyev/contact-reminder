@@ -6,7 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Base64
-import com.iremeber.rememberfriends.data.models.ScheduleAlarmModel
+import com.iremeber.rememberfriends.data.models.db_entities.ScheduleAlarmModel
 import com.iremeber.rememberfriends.di.RepositoryEntryPoints
 import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.CoroutineScope

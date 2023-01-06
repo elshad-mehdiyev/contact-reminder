@@ -15,9 +15,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.iremeber.rememberfriends.R
-import com.iremeber.rememberfriends.data.models.AllContactModel
-import com.iremeber.rememberfriends.data.models.FavoriteContactModel
-import com.iremeber.rememberfriends.data.models.ScheduleAlarmModel
+import com.iremeber.rememberfriends.data.models.device_entities.AllContactModel
+import com.iremeber.rememberfriends.data.models.db_entities.FavoriteContactModel
+import com.iremeber.rememberfriends.data.models.db_entities.ScheduleAlarmModel
 import com.iremeber.rememberfriends.databinding.ReminderContactListBinding
 import com.iremeber.rememberfriends.utils.alarmmanager.AlarmManagerImpl
 import com.iremeber.rememberfriends.utils.language.Language
@@ -43,6 +43,7 @@ class ReminderContactList : Fragment() {
     private lateinit var messageDate: List<String>
     private var updateMessage = ""
     private var updateIntervalMessage = ""
+    private var notificationMessage = ""
 
 
     override fun onCreateView(
@@ -137,7 +138,7 @@ class ReminderContactList : Fragment() {
             alarmManagerImpl.cancelAlarm(model.requestCode)
             alarmManagerImpl.setAlarm(
                 timeInMillis = getTimeOfAlarm(), requestCode = model.requestCode,
-                interval = updateInterval.toInt(), message = updateMessage
+                interval = updateInterval.toInt(), message = notificationMessage
             )
         }
     }
@@ -148,6 +149,7 @@ class ReminderContactList : Fragment() {
                     utils.flipCard(requireContext(), viewFront, viewBack)
                 }
                 R.id.frontOfCard -> {
+                    createNotificationText(model)
                     getUpdatedTextFromViews()
                     updateFavoriteContactList(model)
                     updateScheduleAlarmModel(model)
@@ -156,6 +158,10 @@ class ReminderContactList : Fragment() {
                 }
             }
         }
+    }
+    private fun createNotificationText(model: FavoriteContactModel) {
+        val allContactModel = AllContactModel(id = model.id, name = model.name, firstLetter = model.firstLetter)
+        notificationMessage = languageSelector.displayNotificationText(allContactModel)
     }
 
     private fun getTimeOfMillisForUndoReminderCard(favoriteModel: FavoriteContactModel): Long {

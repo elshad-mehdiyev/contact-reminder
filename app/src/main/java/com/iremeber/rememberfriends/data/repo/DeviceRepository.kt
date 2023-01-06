@@ -2,8 +2,8 @@ package com.iremeber.rememberfriends.data.repo
 
 import com.iremeber.rememberfriends.data.local.AllContacts
 import com.iremeber.rememberfriends.data.local.AllRingtones
-import com.iremeber.rememberfriends.data.models.AllContactModel
-import com.iremeber.rememberfriends.data.models.AllRingtonesModel
+import com.iremeber.rememberfriends.data.models.device_entities.AllContactModel
+import com.iremeber.rememberfriends.data.models.device_entities.AllRingtonesModel
 import javax.inject.Inject
 
 class DeviceRepository @Inject constructor(

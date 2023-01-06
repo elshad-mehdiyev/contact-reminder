@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.WindowManager
 import com.iremeber.rememberfriends.R
 import com.iremeber.rememberfriends.databinding.ActivityCheckPermissionBinding
 import com.iremeber.rememberfriends.ui.MainActivity
@@ -17,6 +18,8 @@ class CheckPermissionActivity : AppCompatActivity(), EasyPermissions.PermissionC
     private lateinit var contactsUtility: ContactsUtility
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window.statusBarColor = getColor(R.color.check_permission_background_color)
         binding = ActivityCheckPermissionBinding.inflate(layoutInflater)
         setContentView(binding.root)
         contactsUtility = ContactsUtility(this)

@@ -18,7 +18,7 @@ class SplashScreenActivity : AppCompatActivity() {
     private fun checkPermission() {
         if (contactsUtility.hasSmsPermission()) {
             Handler(Looper.getMainLooper()).postDelayed({
-                startActivity(Intent(this, MainActivity::class.java))
+                    startActivity(Intent(this, MainActivity::class.java))
                 finish()
             }, 800)
         } else {

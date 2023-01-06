@@ -37,9 +37,11 @@ class SettingPage : Fragment() {
             when(isChecked) {
                 true -> {
                     viewModel.saveToDataStore(MUSIC_ON_PREFERENCE_KEY, 1)
+                    println(1)
                 }
                 false -> {
                     viewModel.saveToDataStore(MUSIC_ON_PREFERENCE_KEY, 0)
+                    println(0)
                 }
             }
         }
@@ -52,7 +54,7 @@ class SettingPage : Fragment() {
         }
         viewModel.ringtonesListData.observe(viewLifecycleOwner) { ringtones ->
             ringtones?.let {
-                println(it[0].title)
+                //println(it[0].title)
             }
         }
     }

@@ -4,6 +4,11 @@
         android:drawable="@drawable/splash_screen_gradient_background"/>
     <item
         android:gravity="center"
+        android:width="288dp"
+        android:height="288dp"
+        android:drawable="@drawable/splash_screen_background_second"/>
+    <item
+        android:gravity="center"
         android:width="160dp"
         android:height="160dp"
         android:drawable="@drawable/splash_screen_icon_background"/>
@@ -11,6 +16,6 @@
         android:gravity="center"
         android:width="240dp"
         android:height="240dp"
-        android:drawable="@drawable/ic_launcher_foreground"
+        android:drawable="@drawable/splash_screen_icon"
         />
 </layer-list>

@@ -13,6 +13,8 @@ import com.iremeber.rememberfriends.R
 import com.iremeber.rememberfriends.databinding.ActivityMainBinding
 import com.iremeber.rememberfriends.utils.alarmmanager.AlarmManagerImpl
 import com.iremeber.rememberfriends.utils.alarmmanager.BootCompletedReceiver
+import com.iremeber.rememberfriends.utils.alarmmanager.ExactAlarmBroadCastReceiver
+import com.iremeber.rememberfriends.utils.alarmmanager.TimeChangedReceiver
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -28,7 +30,9 @@ class MainActivity : AppCompatActivity() {
         if (!exactAlarmManagerImpl.canScheduleExactAlarms()) {
             openSettings()
         }
-        startBootCompletedReceiver()
+        startBootCompletedReceiver(ComponentName(applicationContext, BootCompletedReceiver::class.java))
+        startBootCompletedReceiver(ComponentName(applicationContext, ExactAlarmBroadCastReceiver::class.java))
+        startBootCompletedReceiver(ComponentName(applicationContext, TimeChangedReceiver::class.java))
     }
     private fun setUpNavController() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
@@ -41,9 +45,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM))
         }
     }
-    private fun startBootCompletedReceiver() {
-        val receiver = ComponentName(applicationContext, BootCompletedReceiver::class.java)
-
+    private fun startBootCompletedReceiver(receiver: ComponentName) {
         applicationContext.packageManager?.setComponentEnabledSetting(
             receiver,
             PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
