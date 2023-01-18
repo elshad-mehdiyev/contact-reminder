@@ -27,8 +27,10 @@ class ExactAlarmBroadCastReceiver : HiltBroadcastReceiver() {
 
     @Inject
     lateinit var reminderCardRepository: ReminderCardRepository
+
     @Inject
     lateinit var preferenceRepository: PreferenceRepository
+
     @Inject
     lateinit var scheduleReminderRepository: ScheduleReminderRepository
     private val job = CoroutineScope(SupervisorJob())
@@ -46,9 +48,9 @@ class ExactAlarmBroadCastReceiver : HiltBroadcastReceiver() {
         val interval = intent.getByteArrayExtra("interval")
         val message =
             intent.getStringExtra("message") ?: context.getString(R.string.have_a_one_notification)
-        val decodeTimeInMillis = String(Base64.decode(timeInMillis,0)).toLong()
-        val decodeRequestCode = String(Base64.decode(requestCode,0)).toInt()
-        val decodeInterval = String(Base64.decode(interval,0)).toInt()
+        val decodeTimeInMillis = String(Base64.decode(timeInMillis, 0)).toLong()
+        val decodeRequestCode = String(Base64.decode(requestCode, 0)).toInt()
+        val decodeInterval = String(Base64.decode(interval, 0)).toInt()
         val newTimeInMillis = decodeTimeInMillis + (decodeInterval.toLong() * 24 * 60 * 60 * 1000)
 
         if (decodeInterval > 0) {
@@ -62,8 +64,16 @@ class ExactAlarmBroadCastReceiver : HiltBroadcastReceiver() {
             val updateMessage = languageSelector.displayReminderCardDateText(messageDate, utils)
 
             job.launch(Dispatchers.IO) {
-                reminderCardRepository.updateReminderCardAfterAlarmTrigger(date, decodeRequestCode, updateMessage)
-                scheduleReminderRepository.updateScheduleAlarmAfterAlarmTrigger(newTimeInMillis, decodeRequestCode, decodeInterval)
+                reminderCardRepository.updateReminderCardAfterAlarmTrigger(
+                    date,
+                    decodeRequestCode,
+                    updateMessage
+                )
+                scheduleReminderRepository.updateScheduleAlarm(
+                    newTimeInMillis,
+                    decodeRequestCode,
+                    decodeInterval
+                )
             }
         } else {
             job.launch(Dispatchers.IO) {
@@ -80,13 +90,14 @@ class ExactAlarmBroadCastReceiver : HiltBroadcastReceiver() {
         )
         job.launch(Dispatchers.IO) {
             preferenceRepository.getDataFromDataStore(MUSIC_ON_PREFERENCE_KEY).collectLatest {
-                it.let {
-                    withContext(Dispatchers.Main) {
-                        if (it == 1) {
-                            (context.applicationContext as HiltAndroidApp).apply {
-                                alarmRingtoneState.value = playRingtone(context)
-                            }
-                        }
+                if (it == 1) {
+                    (context.applicationContext as HiltAndroidApp).apply {
+                        alarmRingtoneState.value = playRingtone(context)
+                    }
+                } else {
+                    (context.applicationContext as HiltAndroidApp).apply {
+                        alarmRingtoneState.value?.stop()
+                        alarmRingtoneState.value = null
                     }
                 }
             }

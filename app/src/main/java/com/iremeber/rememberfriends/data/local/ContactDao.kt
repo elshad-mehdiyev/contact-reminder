@@ -41,6 +41,4 @@ interface ContactDao {
     @Query("UPDATE ScheduleAlarmModel SET timInMillis =:newTimeInMillis, interval =:interval WHERE requestCode =:requestCode")
     suspend fun updateScheduleAlarm(newTimeInMillis: Long, requestCode: Int, interval: Int)
 
-    @Query("UPDATE ScheduleAlarmModel SET timInMillis =:newTimeInMillis, interval =:interval WHERE requestCode =:requestCode")
-    suspend fun updateScheduleAlarmAfterAlarmTrigger(newTimeInMillis: Long, requestCode: Int, interval: Int)
 }

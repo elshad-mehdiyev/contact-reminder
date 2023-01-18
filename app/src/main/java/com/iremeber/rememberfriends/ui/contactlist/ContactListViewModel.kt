@@ -11,6 +11,7 @@ import com.iremeber.rememberfriends.data.repo.DeviceRepository
 import com.iremeber.rememberfriends.data.repo.PreferenceRepository
 import com.iremeber.rememberfriends.data.repo.ReminderCardRepository
 import com.iremeber.rememberfriends.data.repo.ScheduleReminderRepository
+import com.iremeber.rememberfriends.domain.GetContactFromDeviceUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -19,7 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ContactListViewModel @Inject constructor(
-    private val deviceRepository: DeviceRepository,
+    private val getContactFromDeviceUseCase: GetContactFromDeviceUseCase,
     private val preferenceRepository: PreferenceRepository,
     private val reminderCardRepository: ReminderCardRepository,
     private val scheduleReminderRepository: ScheduleReminderRepository
@@ -37,7 +38,7 @@ class ContactListViewModel @Inject constructor(
 
     fun getContactFromDevice() {
         viewModelScope.launch {
-            val contactsListAsync = async { deviceRepository.getContactFromDevice() }
+            val contactsListAsync = async { getContactFromDeviceUseCase() }
             val contacts = contactsListAsync.await()
             _contactListData.value = contacts
         }

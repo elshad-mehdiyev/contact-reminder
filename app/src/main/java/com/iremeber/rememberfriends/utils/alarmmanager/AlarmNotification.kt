@@ -64,9 +64,9 @@ fun showNotification(
 class AlarmNotificationDismissedBroadcastReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
-        val alarmRingtoneState = (context.applicationContext as HiltAndroidApp).alarmRingtoneState
-        alarmRingtoneState.value?.stop()
-        alarmRingtoneState.value = null
-        println("alarm stop")
+        (context.applicationContext as HiltAndroidApp).apply {
+            alarmRingtoneState.value?.stop()
+            alarmRingtoneState.value = null
+        }
     }
 }

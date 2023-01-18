@@ -27,7 +27,6 @@ class SettingPage : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getDataFromDataStore(MUSIC_ON_PREFERENCE_KEY)
-        viewModel.getRingtonesFromDevice()
         musicOnCheck()
         observe()
     }
@@ -37,11 +36,9 @@ class SettingPage : Fragment() {
             when(isChecked) {
                 true -> {
                     viewModel.saveToDataStore(MUSIC_ON_PREFERENCE_KEY, 1)
-                    println(1)
                 }
                 false -> {
                     viewModel.saveToDataStore(MUSIC_ON_PREFERENCE_KEY, 0)
-                    println(0)
                 }
             }
         }
@@ -50,11 +47,6 @@ class SettingPage : Fragment() {
         viewModel.requestCodeFromDataStore.observe(viewLifecycleOwner) { isMusicOn ->
             isMusicOn?.let {
                 binding.musicOn.isChecked = isMusicOn == 1
-            }
-        }
-        viewModel.ringtonesListData.observe(viewLifecycleOwner) { ringtones ->
-            ringtones?.let {
-                //println(it[0].title)
             }
         }
     }

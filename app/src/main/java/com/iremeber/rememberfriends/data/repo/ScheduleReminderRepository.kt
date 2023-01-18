@@ -22,12 +22,4 @@ class ScheduleReminderRepository @Inject constructor(
     suspend fun updateScheduleAlarm(newTimeInMillis: Long, requestCode: Int, interval: Int) {
         dao.updateScheduleAlarm(newTimeInMillis, requestCode, interval)
     }
-
-    suspend fun updateScheduleAlarmAfterAlarmTrigger(
-        newTimeInMillis: Long,
-        requestCode: Int,
-        interval: Int
-    ) {
-        dao.updateScheduleAlarmAfterAlarmTrigger(newTimeInMillis, requestCode, interval)
-    }
 }

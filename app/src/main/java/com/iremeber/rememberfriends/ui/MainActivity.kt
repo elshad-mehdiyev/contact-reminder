@@ -11,6 +11,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.iremeber.rememberfriends.R
 import com.iremeber.rememberfriends.databinding.ActivityMainBinding
+import com.iremeber.rememberfriends.di.HiltAndroidApp
 import com.iremeber.rememberfriends.utils.alarmmanager.AlarmManagerImpl
 import com.iremeber.rememberfriends.utils.alarmmanager.BootCompletedReceiver
 import com.iremeber.rememberfriends.utils.alarmmanager.ExactAlarmBroadCastReceiver
@@ -19,7 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -52,8 +53,13 @@ class MainActivity : AppCompatActivity() {
             PackageManager.DONT_KILL_APP
         )
     }
+
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        this.intent = intent
+        (applicationContext as HiltAndroidApp).apply {
+            alarmRingtoneState.value?.stop()
+            alarmRingtoneState.value = null
+        }
     }
+
 }

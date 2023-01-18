@@ -3,7 +3,6 @@ package com.iremeber.rememberfriends.di
 import android.content.Context
 import androidx.room.Room
 import com.iremeber.rememberfriends.data.local.AllContacts
-import com.iremeber.rememberfriends.data.local.AllRingtones
 import com.iremeber.rememberfriends.data.local.ContactDao
 import com.iremeber.rememberfriends.data.local.ContactDb
 import com.iremeber.rememberfriends.data.repo.*
@@ -13,7 +12,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Qualifier
 import javax.inject.Singleton
 
 
@@ -45,9 +43,8 @@ object AppModule {
     @Singleton
     @Provides
     fun provideDeviceRepository(
-        allContacts: AllContacts,
-        allRingtones: AllRingtones
-    ) = DeviceRepository(allContacts, allRingtones)
+        allContacts: AllContacts
+    ) = DeviceRepository(allContacts)
 
     @Singleton
     @Provides

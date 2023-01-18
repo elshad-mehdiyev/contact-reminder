@@ -108,6 +108,7 @@ class ContactList : Fragment() {
             )
         viewModel.saveToScheduleAlarmModel(scheduleAlarmModel)
     }
+
     private fun setAlarmForContact() {
         if (System.currentTimeMillis() < getTimeOfAlarm()) {
             alarmManagerImpl.setAlarm(
@@ -116,6 +117,7 @@ class ContactList : Fragment() {
             )
         }
     }
+
     private fun saveToFavoriteContactModel(allContactModel: AllContactModel) {
         val reminderCardDate =
             languageSelector.displayReminderCardDateText(alarmDate, utils)
@@ -131,10 +133,12 @@ class ContactList : Fragment() {
         )
         viewModel.saveToFavoriteContactList(favoriteContactModel)
     }
+
     private fun showAddReminderLayout() {
         binding.backOfCard.visibility = View.VISIBLE
         binding.recyclerViewContactList.visibility = View.GONE
     }
+
     private fun hideAddReminderLayout() {
         binding.backOfCard.visibility = View.GONE
         binding.recyclerViewContactList.visibility = View.VISIBLE
@@ -161,18 +165,9 @@ class ContactList : Fragment() {
     }
 
     private fun observe() {
-//        viewModel.allContactList.observe(viewLifecycleOwner) { contactsFromDb ->
-//            contactsFromDb?.let { it ->
-//                list = it
-//                contactListAdapter.contactList = it
-//            }
-//        }
         viewModel.contactListData.observe(viewLifecycleOwner) { contacts ->
             contacts?.let { c ->
                 contactListAdapter.contactList = c
-//                        if (list.isEmpty()) {
-//                            viewModel.saveToAllContactList(c)
-//                        }
             }
         }
         viewModel.requestCodeFromDataStore.observe(viewLifecycleOwner) { request ->

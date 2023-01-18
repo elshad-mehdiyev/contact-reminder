@@ -23,6 +23,7 @@ import com.iremeber.rememberfriends.utils.alarmmanager.AlarmManagerImpl
 import com.iremeber.rememberfriends.utils.language.Language
 import com.iremeber.rememberfriends.utils.language.LanguageFactory
 import com.iremeber.rememberfriends.utils.util.UtilsWithContext
+import com.iremeber.rememberfriends.di.HiltAndroidApp
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
@@ -64,6 +65,7 @@ class ReminderContactList : Fragment() {
         deleteFavoriteModelItem()
         showDateTimeDialog()
         flipCard()
+        showStopAlarm()
     }
 
     private fun observe() {
@@ -72,7 +74,18 @@ class ReminderContactList : Fragment() {
                 recyclerAdapter.reminderAdapterList = it.reversed()
             }
         }
+    }
 
+    private fun showStopAlarm() {
+        val alarmRingtoneState = (context?.applicationContext as HiltAndroidApp).alarmRingtoneState
+        if (alarmRingtoneState.value != null) {
+            binding.stopAlarm.visibility = View.VISIBLE
+        }
+        binding.stopAlarm.setOnClickListener {
+            alarmRingtoneState.value?.stop()
+            alarmRingtoneState.value = null
+            binding.stopAlarm.visibility = View.GONE
+        }
     }
 
     private fun showDateTimeDialog() {
@@ -106,6 +119,7 @@ class ReminderContactList : Fragment() {
         updateIntervalMessage =
             languageSelector.displayReminderCardInterval(updateInterval)
     }
+
     private fun getTimeOfAlarm(): Long {
         val alarmHour =
             (updateBeginHour.split(":")[0].toInt() + updateEndHour.split(":")[0].toInt()) / 2
@@ -116,6 +130,7 @@ class ReminderContactList : Fragment() {
             messageDate[0].toInt(), messageDate[1].toInt() - 1, messageDate[2].toInt()
         )
     }
+
     private fun updateFavoriteContactList(model: FavoriteContactModel) {
         viewModel.updateFavoriteContactList(
             date = updateDate,
@@ -127,12 +142,14 @@ class ReminderContactList : Fragment() {
             intervalMessage = updateIntervalMessage
         )
     }
+
     private fun updateScheduleAlarmModel(model: FavoriteContactModel) {
         viewModel.updateScheduleAlarmModel(
-            newTimeInMillis = getTimeOfAlarm() , requestCode = model.requestCode,
+            newTimeInMillis = getTimeOfAlarm(), requestCode = model.requestCode,
             interval = updateInterval.toInt()
         )
     }
+
     private fun updateAlarm(model: FavoriteContactModel) {
         if (System.currentTimeMillis() < getTimeOfAlarm()) {
             alarmManagerImpl.cancelAlarm(model.requestCode)
@@ -142,6 +159,7 @@ class ReminderContactList : Fragment() {
             )
         }
     }
+
     private fun flipCard() {
         recyclerAdapter.setEditorIconClickListener { model, viewFront, viewBack ->
             when (viewFront.id) {
@@ -159,8 +177,10 @@ class ReminderContactList : Fragment() {
             }
         }
     }
+
     private fun createNotificationText(model: FavoriteContactModel) {
-        val allContactModel = AllContactModel(id = model.id, name = model.name, firstLetter = model.firstLetter)
+        val allContactModel =
+            AllContactModel(id = model.id, name = model.name, firstLetter = model.firstLetter)
         notificationMessage = languageSelector.displayNotificationText(allContactModel)
     }
 
@@ -175,6 +195,7 @@ class ReminderContactList : Fragment() {
             messageDate[0].toInt(), messageDate[1].toInt() - 1, messageDate[2].toInt()
         )
     }
+
     private fun deleteFavoriteModelItem() {
         val itemTouchHelper = object : ItemTouchHelper.SimpleCallback(
             ItemTouchHelper.UP or ItemTouchHelper.DOWN,
