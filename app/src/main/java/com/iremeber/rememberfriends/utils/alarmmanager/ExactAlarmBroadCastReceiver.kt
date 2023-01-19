@@ -2,37 +2,45 @@ package com.iremeber.rememberfriends.utils.alarmmanager
 
 import android.content.Context
 import android.content.Intent
+import android.util.Base64
 import com.iremeber.rememberfriends.R
+import com.iremeber.rememberfriends.data.models.enums.DataSourceType
+import com.iremeber.rememberfriends.data.models.enums.UpdateSourceType
+import com.iremeber.rememberfriends.domain.update_entities.UpdateReminderCardAfterAlarmTriggerModel
+import com.iremeber.rememberfriends.domain.update_entities.UpdateScheduleAlarmModel
 import com.iremeber.rememberfriends.di.HiltAndroidApp
-import com.iremeber.rememberfriends.data.repo.ReminderCardRepository
+import com.iremeber.rememberfriends.domain.interactors.DeleteDataUseCase
+import com.iremeber.rememberfriends.domain.interactors.GetDataFromDataStoreUseCase
+import com.iremeber.rememberfriends.domain.interactors.UpdateDataUseCase
+import com.iremeber.rememberfriends.utils.language.LanguageFactory
+import com.iremeber.rememberfriends.utils.util.CommonUtil.getDate
 import com.iremeber.rememberfriends.utils.util.Constants.MUSIC_ON_PREFERENCE_KEY
 import com.iremeber.rememberfriends.utils.util.Constants.NOTIFICATION_CHANNEL_ID
 import com.iremeber.rememberfriends.utils.util.Constants.NOTIFICATION_CHANNEL_NAME
 import com.iremeber.rememberfriends.utils.util.Constants.NOTIFICATION_ID
 import com.iremeber.rememberfriends.utils.util.UtilsWithContext
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
-import android.util.Base64
-import com.iremeber.rememberfriends.data.repo.PreferenceRepository
-import com.iremeber.rememberfriends.data.repo.ScheduleReminderRepository
-import com.iremeber.rememberfriends.utils.language.LanguageFactory
-import com.iremeber.rememberfriends.utils.util.CommonUtil.getDate
 
 
 @AndroidEntryPoint
 class ExactAlarmBroadCastReceiver : HiltBroadcastReceiver() {
 
     @Inject
-    lateinit var reminderCardRepository: ReminderCardRepository
+    lateinit var deleteDataUseCase: DeleteDataUseCase
 
     @Inject
-    lateinit var preferenceRepository: PreferenceRepository
+    lateinit var getDataFromDataStoreUseCase: GetDataFromDataStoreUseCase
 
     @Inject
-    lateinit var scheduleReminderRepository: ScheduleReminderRepository
+    lateinit var updateDataUseCase: UpdateDataUseCase
+
     private val job = CoroutineScope(SupervisorJob())
     private var systemLanguage = "en"
     private lateinit var utils: UtilsWithContext
@@ -62,23 +70,31 @@ class ExactAlarmBroadCastReceiver : HiltBroadcastReceiver() {
             println(date)
             val messageDate = date.split("/")
             val updateMessage = languageSelector.displayReminderCardDateText(messageDate, utils)
+            val updateReminderCardAfterAlarmTriggerModel = UpdateReminderCardAfterAlarmTriggerModel(
+                date,
+                decodeRequestCode,
+                updateMessage
+            )
+            val updateScheduleAlarmModel = UpdateScheduleAlarmModel(
+                newTimeInMillis,
+                decodeRequestCode,
+                decodeInterval
+            )
 
             job.launch(Dispatchers.IO) {
-                reminderCardRepository.updateReminderCardAfterAlarmTrigger(
-                    date,
-                    decodeRequestCode,
-                    updateMessage
+                updateDataUseCase(
+                    reminderAfterAlarm = updateReminderCardAfterAlarmTriggerModel,
+                    updateDataSourceType = UpdateSourceType.REMINDER_CARD_AFTER_ALARM_TRIGGER
                 )
-                scheduleReminderRepository.updateScheduleAlarm(
-                    newTimeInMillis,
-                    decodeRequestCode,
-                    decodeInterval
+                updateDataUseCase(
+                    updateScheduleAlarmModel = updateScheduleAlarmModel,
+                    updateDataSourceType = UpdateSourceType.SCHEDULE
                 )
             }
         } else {
             job.launch(Dispatchers.IO) {
-                scheduleReminderRepository.deleteFromScheduleAlarmModel(decodeRequestCode)
-                reminderCardRepository.deleteFromFavorites(decodeRequestCode)
+                deleteDataUseCase(decodeRequestCode, source = DataSourceType.SCHEDULE)
+                deleteDataUseCase(decodeRequestCode, source = DataSourceType.FAVORITE)
             }
         }
         showNotification(
@@ -89,7 +105,7 @@ class ExactAlarmBroadCastReceiver : HiltBroadcastReceiver() {
             message
         )
         job.launch(Dispatchers.IO) {
-            preferenceRepository.getDataFromDataStore(MUSIC_ON_PREFERENCE_KEY).collectLatest {
+            getDataFromDataStoreUseCase(MUSIC_ON_PREFERENCE_KEY).collectLatest {
                 if (it == 1) {
                     (context.applicationContext as HiltAndroidApp).apply {
                         alarmRingtoneState.value = playRingtone(context)

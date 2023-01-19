@@ -15,9 +15,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.iremeber.rememberfriends.R
+import com.iremeber.rememberfriends.data.models.enums.DataSourceType
 import com.iremeber.rememberfriends.data.models.device_entities.AllContactModel
 import com.iremeber.rememberfriends.data.models.db_entities.FavoriteContactModel
 import com.iremeber.rememberfriends.data.models.db_entities.ScheduleAlarmModel
+import com.iremeber.rememberfriends.data.models.enums.UpdateSourceType
+import com.iremeber.rememberfriends.domain.update_entities.UpdateReminderCardModel
+import com.iremeber.rememberfriends.domain.update_entities.UpdateScheduleAlarmModel
 import com.iremeber.rememberfriends.databinding.ReminderContactListBinding
 import com.iremeber.rememberfriends.utils.alarmmanager.AlarmManagerImpl
 import com.iremeber.rememberfriends.utils.language.Language
@@ -132,7 +136,7 @@ class ReminderContactList : Fragment() {
     }
 
     private fun updateFavoriteContactList(model: FavoriteContactModel) {
-        viewModel.updateFavoriteContactList(
+        val updateReminderCardModel = UpdateReminderCardModel(
             date = updateDate,
             interval = updateInterval,
             beginHour = updateBeginHour,
@@ -141,12 +145,21 @@ class ReminderContactList : Fragment() {
             dateMessage = updateMessage,
             intervalMessage = updateIntervalMessage
         )
+        viewModel.updateData(
+            reminderCard = updateReminderCardModel,
+            updateDataSourceType = UpdateSourceType.REMINDER_CARD
+        )
     }
 
     private fun updateScheduleAlarmModel(model: FavoriteContactModel) {
-        viewModel.updateScheduleAlarmModel(
-            newTimeInMillis = getTimeOfAlarm(), requestCode = model.requestCode,
+        val updateScheduleAlarmModel = UpdateScheduleAlarmModel(
+            newTimeInMillis = getTimeOfAlarm(),
+            requestCode = model.requestCode,
             interval = updateInterval.toInt()
+        )
+        viewModel.updateData(
+            updateScheduleAlarmModel = updateScheduleAlarmModel,
+            updateDataSourceType = UpdateSourceType.SCHEDULE
         )
     }
 
@@ -215,9 +228,9 @@ class ReminderContactList : Fragment() {
 
                 val favoriteModel = recyclerAdapter.reminderAdapterList[position]
 
-                viewModel.deleteFromFavoriteContactList(favoriteModel.requestCode)
+                viewModel.deleteData(favoriteModel.requestCode, source = DataSourceType.FAVORITE)
 
-                viewModel.deleteFromScheduleAlarmModel(favoriteModel.requestCode)
+                viewModel.deleteData(favoriteModel.requestCode, source = DataSourceType.SCHEDULE)
 
                 alarmManagerImpl.cancelAlarm(favoriteModel.requestCode)
 
@@ -243,8 +256,8 @@ class ReminderContactList : Fragment() {
                     Snackbar.LENGTH_LONG
                 ).apply {
                     setAction(getString(R.string.snackbar_undo)) {
-                        viewModel.saveToFavoriteContactList(favoriteModel)
-                        viewModel.saveToScheduleAlarmModel(scheduleAlarmModel)
+                        viewModel.saveDataToDb(contact = favoriteModel,source = DataSourceType.FAVORITE)
+                        viewModel.saveDataToDb(scheduleAlarmModel = scheduleAlarmModel, source = DataSourceType.SCHEDULE)
                         alarmManagerImpl.reScheduleAlarms()
                     }
                 }.show()

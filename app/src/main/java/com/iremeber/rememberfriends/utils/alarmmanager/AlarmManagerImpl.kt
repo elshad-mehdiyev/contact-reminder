@@ -32,9 +32,9 @@ class AlarmManagerImpl (
     fun reScheduleAlarms() {
         val repositoryEntryPoint = EntryPointAccessors.fromApplication(
             context, RepositoryEntryPoints::class.java)
-        val repository = repositoryEntryPoint.repository
+        val getFromScheduleModelUseCase = repositoryEntryPoint.getFromScheduleModelUseCase
         job.launch {
-            scheduleAlarmList = repository.getAllFromScheduleAlarmModel()
+            scheduleAlarmList = getFromScheduleModelUseCase()
             if (scheduleAlarmList.isNotEmpty()) {
                 for (alarm in scheduleAlarmList) {
                     setAlarm(

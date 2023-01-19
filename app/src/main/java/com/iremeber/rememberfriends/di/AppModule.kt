@@ -38,7 +38,7 @@ object AppModule {
     @Provides
     fun provideReminderCardRepository(
         dao: ContactDao,
-    ) = ReminderCardRepository(dao)
+    ) = LocalRepository(dao)
 
     @Singleton
     @Provides
@@ -51,12 +51,6 @@ object AppModule {
     fun providePreferenceRepository(
         @ApplicationContext context: Context,
     ) = PreferenceRepository(context)
-
-    @Singleton
-    @Provides
-    fun provideScheduleRepository(
-        dao: ContactDao,
-    ) = ScheduleReminderRepository(dao)
 
     @Singleton
     @Provides

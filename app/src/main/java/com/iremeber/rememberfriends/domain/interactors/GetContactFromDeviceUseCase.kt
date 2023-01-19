@@ -1,4 +1,4 @@
-package com.iremeber.rememberfriends.domain
+package com.iremeber.rememberfriends.domain.interactors
 
 import com.iremeber.rememberfriends.data.models.device_entities.AllContactModel
 import com.iremeber.rememberfriends.data.repo.DeviceRepository

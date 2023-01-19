@@ -4,16 +4,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.iremeber.rememberfriends.data.models.device_entities.AllContactModel
+import com.iremeber.rememberfriends.data.models.enums.DataSourceType
 import com.iremeber.rememberfriends.data.models.db_entities.FavoriteContactModel
 import com.iremeber.rememberfriends.data.models.db_entities.ScheduleAlarmModel
-import com.iremeber.rememberfriends.data.repo.DeviceRepository
-import com.iremeber.rememberfriends.data.repo.PreferenceRepository
-import com.iremeber.rememberfriends.data.repo.ReminderCardRepository
-import com.iremeber.rememberfriends.data.repo.ScheduleReminderRepository
-import com.iremeber.rememberfriends.domain.GetContactFromDeviceUseCase
+import com.iremeber.rememberfriends.data.models.device_entities.AllContactModel
+import com.iremeber.rememberfriends.domain.interactors.GetContactFromDeviceUseCase
+import com.iremeber.rememberfriends.domain.interactors.GetDataFromDataStoreUseCase
+import com.iremeber.rememberfriends.domain.interactors.SaveDataUseCase
+import com.iremeber.rememberfriends.domain.interactors.SaveToDataStoreUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -21,9 +20,9 @@ import javax.inject.Inject
 @HiltViewModel
 class ContactListViewModel @Inject constructor(
     private val getContactFromDeviceUseCase: GetContactFromDeviceUseCase,
-    private val preferenceRepository: PreferenceRepository,
-    private val reminderCardRepository: ReminderCardRepository,
-    private val scheduleReminderRepository: ScheduleReminderRepository
+    private val saveDataUseCase: SaveDataUseCase,
+    private val saveToDataStoreUseCase: SaveToDataStoreUseCase,
+    private val getDataFromDataStoreUseCase: GetDataFromDataStoreUseCase
     ): ViewModel() {
 
     private val _requestCodeFromDataStore = MutableLiveData<Int>()
@@ -43,26 +42,23 @@ class ContactListViewModel @Inject constructor(
             _contactListData.value = contacts
         }
     }
-    fun saveToFavoriteContactList(contactModel: FavoriteContactModel) {
+    fun saveDataToDb(contact: FavoriteContactModel? = null,
+                     scheduleAlarmModel: ScheduleAlarmModel? = null,
+                     source: DataSourceType
+    ) {
         viewModelScope.launch {
-            reminderCardRepository.saveToFavorites(contactModel)
-        }
-    }
-
-    fun saveToScheduleAlarmModel(scheduleAlarmModel: ScheduleAlarmModel) {
-        viewModelScope.launch {
-            scheduleReminderRepository.saveToScheduleAlarm(scheduleAlarmModel)
+            saveDataUseCase(contact, scheduleAlarmModel, source)
         }
     }
 
     fun saveToDataStore(key: String, value: Int) {
         viewModelScope.launch {
-            preferenceRepository.saveToDataStore(key, value)
+            saveToDataStoreUseCase(key, value)
         }
     }
     fun getDataFromDataStore(key: String) {
         viewModelScope.launch {
-            preferenceRepository.getDataFromDataStore(key).collect {
+            getDataFromDataStoreUseCase(key).collect {
                 _requestCodeFromDataStore.value = it
             }
         }

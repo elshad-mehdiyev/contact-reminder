@@ -2,58 +2,51 @@ package com.iremeber.rememberfriends.ui.reminderpage
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.iremeber.rememberfriends.data.models.enums.DataSourceType
 import com.iremeber.rememberfriends.data.models.db_entities.FavoriteContactModel
 import com.iremeber.rememberfriends.data.models.db_entities.ScheduleAlarmModel
-import com.iremeber.rememberfriends.data.repo.ReminderCardRepository
-import com.iremeber.rememberfriends.data.repo.ScheduleReminderRepository
+import com.iremeber.rememberfriends.data.models.enums.UpdateSourceType
+import com.iremeber.rememberfriends.domain.update_entities.UpdateReminderCardAfterAlarmTriggerModel
+import com.iremeber.rememberfriends.domain.update_entities.UpdateReminderCardModel
+import com.iremeber.rememberfriends.domain.update_entities.UpdateScheduleAlarmModel
+import com.iremeber.rememberfriends.domain.interactors.DeleteDataUseCase
+import com.iremeber.rememberfriends.domain.interactors.GetFromFavoriteModelUseCase
+import com.iremeber.rememberfriends.domain.interactors.SaveDataUseCase
+import com.iremeber.rememberfriends.domain.interactors.UpdateDataUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ReminderContactViewModel @Inject constructor(
-    private val reminderCardRepository: ReminderCardRepository,
-    private val scheduleReminderRepository: ScheduleReminderRepository
+    private val saveDataUseCase: SaveDataUseCase,
+    private val deleteDataUseCase: DeleteDataUseCase,
+    private val updateDataUseCase: UpdateDataUseCase,
+    private val getFromFavoriteModelUseCase: GetFromFavoriteModelUseCase
 ): ViewModel() {
 
-    val favoriteContactList = reminderCardRepository.getAllFromFavorites()
+    val favoriteContactList = getFromFavoriteModelUseCase()
 
-    fun deleteFromFavoriteContactList(requestCode: Int) {
+    fun deleteData(requestCode: Int, source: DataSourceType) {
         viewModelScope.launch {
-            reminderCardRepository.deleteFromFavorites(requestCode)
+            deleteDataUseCase(requestCode, source)
         }
     }
-    fun updateFavoriteContactList(date: String,
-                                  interval: String,
-                                  beginHour: String,
-                                  endHour: String,
-                                  dateMessage: String,
-                                  intervalMessage: String,
-                                  requestCode: Int) {
+    fun updateData(reminderCard: UpdateReminderCardModel? = null,
+                   ReminderAfterAlarm: UpdateReminderCardAfterAlarmTriggerModel? = null,
+                   updateScheduleAlarmModel: UpdateScheduleAlarmModel? = null,
+                   updateDataSourceType: UpdateSourceType
+    ) {
         viewModelScope.launch {
-            reminderCardRepository.updateReminderCard(date, interval, beginHour, endHour,
-                dateMessage, intervalMessage, requestCode)
+            updateDataUseCase(reminderCard, ReminderAfterAlarm, updateScheduleAlarmModel, updateDataSourceType)
         }
     }
-    fun deleteFromScheduleAlarmModel(requestCode: Int) {
+    fun saveDataToDb(contact: FavoriteContactModel? = null,
+                                  scheduleAlarmModel: ScheduleAlarmModel? = null,
+                                  source: DataSourceType
+    ) {
         viewModelScope.launch {
-            scheduleReminderRepository.deleteFromScheduleAlarmModel(requestCode)
-        }
-    }
-    fun updateScheduleAlarmModel(newTimeInMillis: Long, requestCode: Int, interval: Int) {
-        viewModelScope.launch {
-            scheduleReminderRepository.updateScheduleAlarm(newTimeInMillis, requestCode, interval )
-        }
-    }
-    fun saveToFavoriteContactList(contactModel: FavoriteContactModel) {
-        viewModelScope.launch {
-            reminderCardRepository.saveToFavorites(contactModel)
-        }
-    }
-
-    fun saveToScheduleAlarmModel(scheduleAlarmModel: ScheduleAlarmModel) {
-        viewModelScope.launch {
-            scheduleReminderRepository.saveToScheduleAlarm(scheduleAlarmModel)
+            saveDataUseCase(contact, scheduleAlarmModel, source)
         }
     }
 }

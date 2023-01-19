@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.iremeber.rememberfriends.data.models.enums.DataSourceType
 import com.iremeber.rememberfriends.data.models.device_entities.AllContactModel
 import com.iremeber.rememberfriends.data.models.db_entities.FavoriteContactModel
 import com.iremeber.rememberfriends.data.models.db_entities.ScheduleAlarmModel
@@ -106,7 +107,7 @@ class ContactList : Fragment() {
                 timInMillis = getTimeOfAlarm(), requestCode = requestCode,
                 message = message, interval = interval.toInt()
             )
-        viewModel.saveToScheduleAlarmModel(scheduleAlarmModel)
+        viewModel.saveDataToDb(scheduleAlarmModel = scheduleAlarmModel, source = DataSourceType.SCHEDULE)
     }
 
     private fun setAlarmForContact() {
@@ -131,7 +132,7 @@ class ContactList : Fragment() {
             dateMessage = reminderCardDate, intervalMessage = reminderCardInterval,
             startHour = beginHour, endHour = endHour
         )
-        viewModel.saveToFavoriteContactList(favoriteContactModel)
+        viewModel.saveDataToDb(contact = favoriteContactModel, source = DataSourceType.FAVORITE)
     }
 
     private fun showAddReminderLayout() {
