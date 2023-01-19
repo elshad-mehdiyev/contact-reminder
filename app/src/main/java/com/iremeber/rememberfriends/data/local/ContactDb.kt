@@ -9,4 +9,5 @@ import com.iremeber.rememberfriends.data.models.db_entities.ScheduleAlarmModel
     version = 1, exportSchema = false)
 abstract class ContactDb: RoomDatabase() {
     abstract fun getContactDao(): ContactDao
+    abstract fun getScheduleDao(): ScheduleDao
 }

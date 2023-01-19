@@ -2,6 +2,7 @@ package com.iremeber.rememberfriends.data.repo
 
 import androidx.lifecycle.LiveData
 import com.iremeber.rememberfriends.data.local.ContactDao
+import com.iremeber.rememberfriends.data.local.ScheduleDao
 import com.iremeber.rememberfriends.data.models.enums.DataSourceType
 import com.iremeber.rememberfriends.data.models.db_entities.FavoriteContactModel
 import com.iremeber.rememberfriends.data.models.db_entities.ScheduleAlarmModel
@@ -13,7 +14,8 @@ import javax.inject.Inject
 
 
 class LocalRepository @Inject constructor(
-    private val dao: ContactDao
+    private val contactDao: ContactDao,
+    private val scheduleDao: ScheduleDao
 ) {
     suspend fun saveData(
         contact: FavoriteContactModel? = null,
@@ -21,24 +23,24 @@ class LocalRepository @Inject constructor(
         source: DataSourceType
     ) {
         when (source) {
-            DataSourceType.FAVORITE -> contact?.let { dao.saveToFavorites(it) }
-            DataSourceType.SCHEDULE -> scheduleAlarmModel?.let { dao.saveToScheduleAlarm(it) }
+            DataSourceType.FAVORITE -> contact?.let { contactDao.saveToFavorites(it) }
+            DataSourceType.SCHEDULE -> scheduleAlarmModel?.let { scheduleDao.saveToScheduleAlarm(it) }
         }
     }
 
     suspend fun deleteData(requestCode: Int, source: DataSourceType) {
         when (source) {
-            DataSourceType.FAVORITE -> dao.deleteFromFavorites(requestCode)
-            DataSourceType.SCHEDULE -> dao.deleteFromScheduleAlarmModel(requestCode)
+            DataSourceType.FAVORITE -> contactDao.deleteFromFavorites(requestCode)
+            DataSourceType.SCHEDULE -> scheduleDao.deleteFromScheduleAlarmModel(requestCode)
         }
     }
 
     fun getAllFromFavorites(): LiveData<List<FavoriteContactModel>> {
-        return dao.getAllFromFavorites()
+        return contactDao.getAllFromFavorites()
     }
 
     fun getAllFromScheduleAlarmModel(): List<ScheduleAlarmModel> {
-        return dao.getAllFromScheduleAlarmModel()
+        return scheduleDao.getAllFromScheduleAlarmModel()
     }
 
     suspend fun updateData(
@@ -50,7 +52,7 @@ class LocalRepository @Inject constructor(
         when (updateDataSourceType) {
             UpdateSourceType.REMINDER_CARD -> {
                 if (reminderCard != null) {
-                    dao.updateReminderCard(
+                    contactDao.updateReminderCard(
                         reminderCard.date, reminderCard.interval,
                         reminderCard.beginHour, reminderCard.endHour, reminderCard.dateMessage,
                         reminderCard.intervalMessage, reminderCard.requestCode
@@ -59,7 +61,7 @@ class LocalRepository @Inject constructor(
             }
             UpdateSourceType.REMINDER_CARD_AFTER_ALARM_TRIGGER -> {
                 if (ReminderAfterAlarm != null) {
-                    dao.updateReminderCardAfterAlarmTrigger(
+                    contactDao.updateReminderCardAfterAlarmTrigger(
                         ReminderAfterAlarm.date,
                         ReminderAfterAlarm.requestCode,
                         ReminderAfterAlarm.dateMessage
@@ -68,7 +70,7 @@ class LocalRepository @Inject constructor(
             }
             UpdateSourceType.SCHEDULE -> {
                 if (updateScheduleAlarmModel != null) {
-                    dao.updateScheduleAlarm(
+                    scheduleDao.updateScheduleAlarm(
                         updateScheduleAlarmModel.newTimeInMillis,
                         updateScheduleAlarmModel.requestCode,
                         updateScheduleAlarmModel.interval
