@@ -13,7 +13,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 
-class AlarmManagerImpl (
+class AlarmManagerImpl(
     val context: Context,
 ) {
     private val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -31,18 +31,21 @@ class AlarmManagerImpl (
 
     fun reScheduleAlarms() {
         val repositoryEntryPoint = EntryPointAccessors.fromApplication(
-            context, RepositoryEntryPoints::class.java)
+            context, RepositoryEntryPoints::class.java
+        )
         val getFromScheduleModelUseCase = repositoryEntryPoint.getFromScheduleModelUseCase
         job.launch {
             scheduleAlarmList = getFromScheduleModelUseCase()
             if (scheduleAlarmList.isNotEmpty()) {
                 for (alarm in scheduleAlarmList) {
-                    setAlarm(
-                        timeInMillis = alarm.timInMillis,
-                        requestCode = alarm.requestCode,
-                        message = alarm.message,
-                        interval = alarm.interval,
-                    )
+                    if (System.currentTimeMillis() < alarm.timInMillis) {
+                        setAlarm(
+                            timeInMillis = alarm.timInMillis,
+                            requestCode = alarm.requestCode,
+                            message = alarm.message,
+                            interval = alarm.interval,
+                        )
+                    }
                 }
             }
         }
@@ -54,7 +57,7 @@ class AlarmManagerImpl (
         message: String,
         interval: Int
     ) {
-        val pendingIntent = createExactAlarmIntent(timeInMillis,requestCode,interval,message)
+        val pendingIntent = createExactAlarmIntent(timeInMillis, requestCode, interval, message)
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent)
     }
 
@@ -78,6 +81,7 @@ class AlarmManagerImpl (
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
     }
+
     fun cancelAlarm(requestCode: Int) {
         val pendingIntent = PendingIntent.getBroadcast(
             context,

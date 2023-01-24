@@ -15,10 +15,10 @@ interface ContactDao {
     @Query("SELECT * FROM FavoriteContactModel")
     fun getAllFromFavorites(): LiveData<List<FavoriteContactModel>>
     @Query("UPDATE FavoriteContactModel SET date =:date, interval =:interval " +
-            " , startHour =:beginHour , endHour =:endHour, dateMessage =:dateMessage, " +
+            " , startHour =:beginHour , dateMessage =:dateMessage, " +
             "intervalMessage =:intervalMessage WHERE requestCode =:requestCode")
-    suspend fun updateReminderCard(date: String,interval: String,beginHour: String,
-                                   endHour:String,dateMessage: String,
+    suspend fun updateReminderCard(date: String,interval: String,
+                                   beginHour: String, dateMessage: String,
                                    intervalMessage: String, requestCode: Int)
     @Query("UPDATE FavoriteContactModel SET date =:date, dateMessage =:dateMessage WHERE requestCode =:requestCode")
     suspend fun updateReminderCardAfterAlarmTrigger(date: String, requestCode: Int, dateMessage: String)

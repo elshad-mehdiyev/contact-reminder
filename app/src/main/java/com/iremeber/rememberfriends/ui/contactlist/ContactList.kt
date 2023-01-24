@@ -1,9 +1,13 @@
 package com.iremeber.rememberfriends.ui.contactlist
 
+import android.content.Context
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -34,7 +38,6 @@ class ContactList : Fragment() {
     private lateinit var languageSelector: Language
     private var date = ""
     private var beginHour = ""
-    private var endHour = ""
     private var interval = ""
     private var message = ""
     private var timeOfAlarm = 0L
@@ -51,7 +54,6 @@ class ContactList : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initObjects()
-        viewModel.getContactFromDevice()
         viewModel.getDataFromDataStore(REQUEST_CODE_PREFERENCE_KEY)
         buttonClicker()
         addToFavoriteContacts()
@@ -72,14 +74,12 @@ class ContactList : Fragment() {
             languageSelector.displayReminderForContactText(allContactModel)
         binding.datePicker.text = utils.getDate()
         binding.beginningTimePicker.text = utils.getHourAndMinute()
-        binding.endTimePicker.text = utils.getHourAndMinute()
         message = languageSelector.displayNotificationText(allContactModel)
     }
 
     private fun getTextFromViews() {
         date = binding.datePicker.text.toString()
         beginHour = binding.beginningTimePicker.text.toString()
-        endHour = binding.endTimePicker.text.toString()
         interval = binding.intervalEditText.text.toString()
         if (interval.isEmpty()) {
             interval = "0"
@@ -88,11 +88,9 @@ class ContactList : Fragment() {
 
     private fun getTimeOfAlarm(): Long {
         alarmDate = date.split("/")
-        if (alarmDate.isNotEmpty() && beginHour.isNotEmpty() && endHour.isNotEmpty()) {
-            val alarmHour =
-                (beginHour.split(":")[0].toInt() + endHour.split(":")[0].toInt()) / 2
-            val alarmMinute =
-                (beginHour.split(":")[1].toInt() + endHour.split(":")[1].toInt()) / 2
+        if (alarmDate.isNotEmpty() && beginHour.isNotEmpty()) {
+            val alarmHour = beginHour.split(":")[0].toInt()
+            val alarmMinute = beginHour.split(":")[1].toInt()
             timeOfAlarm = utils.convertToTimeInMillis(
                 alarmMinute, alarmHour,
                 alarmDate[0].toInt(), alarmDate[1].toInt() - 1, alarmDate[2].toInt()
@@ -130,7 +128,7 @@ class ContactList : Fragment() {
             interval = interval, requestCode = requestCode,
             firstLetter = allContactModel.name[0].toString(),
             dateMessage = reminderCardDate, intervalMessage = reminderCardInterval,
-            startHour = beginHour, endHour = endHour
+            startHour = beginHour
         )
         viewModel.saveDataToDb(contact = favoriteContactModel, source = DataSourceType.FAVORITE)
     }
@@ -151,6 +149,7 @@ class ContactList : Fragment() {
             beginningStateForViews(allContactModel)
             showAddReminderLayout()
             binding.createReminderButton.setOnClickListener {
+                hideKeyboard()
                 getTextFromViews()
                 saveToScheduleAlarmModel()
                 setAlarmForContact()
@@ -185,15 +184,18 @@ class ContactList : Fragment() {
         binding.beginningTimePicker.setOnClickListener {
             utils.showTimePickerDialog(binding.beginningTimePicker, childFragmentManager)
         }
-        binding.endTimePicker.setOnClickListener {
-            utils.showTimePickerDialog(binding.endTimePicker, childFragmentManager)
-        }
         binding.cancelReminderButton.setOnClickListener {
+            hideKeyboard()
             binding.backOfCard.visibility = View.GONE
             binding.recyclerViewContactList.visibility = View.VISIBLE
         }
     }
 
+    private fun hideKeyboard() {
+        val inputMethodManager =
+            requireContext().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(requireActivity().currentFocus?.windowToken, 0)
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

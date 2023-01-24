@@ -50,9 +50,6 @@ class ReminderContactListAdapter: RecyclerView.Adapter<ReminderContactListAdapte
     }
     private var onEditTextClickListener: ((view: EditText) -> Unit)? = null
 
-    fun setEditTextClickListener(listener : (view: EditText) -> Unit) {
-        onEditTextClickListener = listener
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReminderHolder {
         val binding = ReminderContactListRecycleItemBinding.inflate(
@@ -95,11 +92,6 @@ class ReminderContactListAdapter: RecyclerView.Adapter<ReminderContactListAdapte
         holder.binding.editorHourStartCardBack.setOnClickListener {
             onTextClickListener?.let {
                 it(holder.binding.editorHourStartCardBack)
-            }
-        }
-        holder.binding.editorHourEndCardBack.setOnClickListener {
-            onTextClickListener?.let {
-                it(holder.binding.editorHourEndCardBack)
             }
         }
     }

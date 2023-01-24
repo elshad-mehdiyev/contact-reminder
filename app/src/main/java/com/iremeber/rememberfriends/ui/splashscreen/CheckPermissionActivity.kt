@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.view.WindowManager
 import com.iremeber.rememberfriends.R
 import com.iremeber.rememberfriends.databinding.ActivityCheckPermissionBinding
-import com.iremeber.rememberfriends.ui.MainActivity
+import com.iremeber.rememberfriends.ui.main_activity.MainActivity
 import com.iremeber.rememberfriends.utils.util.Constants
 import com.iremeber.rememberfriends.utils.util.ContactsUtility
 import pub.devrel.easypermissions.AppSettingsDialog

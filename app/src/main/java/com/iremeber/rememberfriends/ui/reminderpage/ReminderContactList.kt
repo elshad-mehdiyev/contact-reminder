@@ -44,7 +44,6 @@ class ReminderContactList : Fragment() {
     private var updateDate = ""
     private var updateInterval = ""
     private var updateBeginHour = ""
-    private var updateEndHour = ""
     private lateinit var messageDate: List<String>
     private var updateMessage = ""
     private var updateIntervalMessage = ""
@@ -101,9 +100,6 @@ class ReminderContactList : Fragment() {
                 R.id.editorHourStartCardBack -> {
                     utils.showTimePickerDialog(view, childFragmentManager)
                 }
-                R.id.editorHourEndCardBack -> {
-                    utils.showTimePickerDialog(view, childFragmentManager)
-                }
             }
         }
     }
@@ -115,8 +111,7 @@ class ReminderContactList : Fragment() {
             requireActivity().findViewById<EditText>(R.id.editorIntervalCardBack).text.toString()
         updateBeginHour =
             requireActivity().findViewById<TextView>(R.id.editorHourStartCardBack).text.toString()
-        updateEndHour =
-            requireActivity().findViewById<TextView>(R.id.editorHourEndCardBack).text.toString()
+
         messageDate = updateDate.split("/")
         updateMessage = languageSelector.displayReminderCardDateText(messageDate, utils)
         if (updateInterval.isEmpty()) updateInterval = "0"
@@ -125,10 +120,8 @@ class ReminderContactList : Fragment() {
     }
 
     private fun getTimeOfAlarm(): Long {
-        val alarmHour =
-            (updateBeginHour.split(":")[0].toInt() + updateEndHour.split(":")[0].toInt()) / 2
-        val alarmMinute =
-            (updateBeginHour.split(":")[1].toInt() + updateEndHour.split(":")[1].toInt()) / 2
+        val alarmHour = updateBeginHour.split(":")[0].toInt()
+        val alarmMinute = updateBeginHour.split(":")[1].toInt()
         return utils.convertToTimeInMillis(
             alarmMinute, alarmHour,
             messageDate[0].toInt(), messageDate[1].toInt() - 1, messageDate[2].toInt()
@@ -140,7 +133,6 @@ class ReminderContactList : Fragment() {
             date = updateDate,
             interval = updateInterval,
             beginHour = updateBeginHour,
-            endHour = updateEndHour,
             requestCode = model.requestCode,
             dateMessage = updateMessage,
             intervalMessage = updateIntervalMessage
@@ -199,10 +191,8 @@ class ReminderContactList : Fragment() {
 
     private fun getTimeOfMillisForUndoReminderCard(favoriteModel: FavoriteContactModel): Long {
         val messageDate = favoriteModel.date.split("/")
-        val alarmHour =
-            (favoriteModel.startHour.split(":")[0].toInt() + favoriteModel.endHour.split(":")[0].toInt()) / 2
-        val alarmMinute =
-            (favoriteModel.startHour.split(":")[1].toInt() + favoriteModel.endHour.split(":")[1].toInt()) / 2
+        val alarmHour = favoriteModel.startHour.split(":")[0].toInt()
+        val alarmMinute = favoriteModel.startHour.split(":")[1].toInt()
         return utils.convertToTimeInMillis(
             alarmMinute, alarmHour,
             messageDate[0].toInt(), messageDate[1].toInt() - 1, messageDate[2].toInt()

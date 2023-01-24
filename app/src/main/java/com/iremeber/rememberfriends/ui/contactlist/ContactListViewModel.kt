@@ -8,10 +8,7 @@ import com.iremeber.rememberfriends.data.models.enums.DataSourceType
 import com.iremeber.rememberfriends.data.models.db_entities.FavoriteContactModel
 import com.iremeber.rememberfriends.data.models.db_entities.ScheduleAlarmModel
 import com.iremeber.rememberfriends.data.models.device_entities.AllContactModel
-import com.iremeber.rememberfriends.domain.interactors.GetContactFromDeviceUseCase
-import com.iremeber.rememberfriends.domain.interactors.GetDataFromDataStoreUseCase
-import com.iremeber.rememberfriends.domain.interactors.SaveDataUseCase
-import com.iremeber.rememberfriends.domain.interactors.SaveToDataStoreUseCase
+import com.iremeber.rememberfriends.domain.interactors.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -19,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ContactListViewModel @Inject constructor(
-    private val getContactFromDeviceUseCase: GetContactFromDeviceUseCase,
+    private val getAllContactFromDbUseCase: GetAllContactFromDbUseCase,
     private val saveDataUseCase: SaveDataUseCase,
     private val saveToDataStoreUseCase: SaveToDataStoreUseCase,
     private val getDataFromDataStoreUseCase: GetDataFromDataStoreUseCase
@@ -30,18 +27,9 @@ class ContactListViewModel @Inject constructor(
         get() = _requestCodeFromDataStore
 
 
-    private val _contactListData = MutableLiveData<List<AllContactModel>>()
-    val contactListData: LiveData<List<AllContactModel>>
-        get() = _contactListData
+    val contactListData = getAllContactFromDbUseCase()
 
 
-    fun getContactFromDevice() {
-        viewModelScope.launch {
-            val contactsListAsync = async { getContactFromDeviceUseCase() }
-            val contacts = contactsListAsync.await()
-            _contactListData.value = contacts
-        }
-    }
     fun saveDataToDb(contact: FavoriteContactModel? = null,
                      scheduleAlarmModel: ScheduleAlarmModel? = null,
                      source: DataSourceType

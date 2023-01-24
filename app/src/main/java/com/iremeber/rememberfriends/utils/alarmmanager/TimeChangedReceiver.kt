@@ -8,12 +8,9 @@ import android.content.Intent
 class TimeChangedReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
-        val action = intent.action
-        action?.let {
-            if (it == "android.intent.action.TIME_SET") {
-                val alarmManagerImpl = AlarmManagerImpl(context)
-                alarmManagerImpl.reScheduleAlarms()
-            }
+        if (intent.action == "android.intent.action.TIME_SET") {
+            val alarmManagerImpl = AlarmManagerImpl(context)
+            alarmManagerImpl.reScheduleAlarms()
         }
     }
 }

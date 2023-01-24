@@ -2,10 +2,7 @@ package com.iremeber.rememberfriends.di
 
 import android.content.Context
 import androidx.room.Room
-import com.iremeber.rememberfriends.data.local.AllContacts
-import com.iremeber.rememberfriends.data.local.ContactDao
-import com.iremeber.rememberfriends.data.local.ContactDb
-import com.iremeber.rememberfriends.data.local.ScheduleDao
+import com.iremeber.rememberfriends.data.local.*
 import com.iremeber.rememberfriends.data.repo.*
 import com.iremeber.rememberfriends.utils.util.Constants.DB_NAME
 import dagger.Module
@@ -43,10 +40,17 @@ object AppModule {
 
     @Singleton
     @Provides
+    fun provideContactsFromDeviceDao(
+        database: ContactDb
+    ) = database.getContactsFromDeviceDao()
+
+    @Singleton
+    @Provides
     fun provideReminderCardRepository(
         contactDao: ContactDao,
-        scheduleDao: ScheduleDao
-    ) = LocalRepository(contactDao, scheduleDao)
+        scheduleDao: ScheduleDao,
+        contactsFromDeviceDao: ContactsFromDeviceDao
+    ) = LocalRepository(contactDao, scheduleDao, contactsFromDeviceDao)
 
     @Singleton
     @Provides

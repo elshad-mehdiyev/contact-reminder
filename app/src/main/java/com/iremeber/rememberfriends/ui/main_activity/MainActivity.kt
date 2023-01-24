@@ -1,4 +1,4 @@
-package com.iremeber.rememberfriends.ui
+package com.iremeber.rememberfriends.ui.main_activity
 
 import android.content.ComponentName
 import android.content.Intent
@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -14,8 +15,6 @@ import com.iremeber.rememberfriends.databinding.ActivityMainBinding
 import com.iremeber.rememberfriends.di.HiltAndroidApp
 import com.iremeber.rememberfriends.utils.alarmmanager.AlarmManagerImpl
 import com.iremeber.rememberfriends.utils.alarmmanager.BootCompletedReceiver
-import com.iremeber.rememberfriends.utils.alarmmanager.ExactAlarmBroadCastReceiver
-import com.iremeber.rememberfriends.utils.alarmmanager.TimeChangedReceiver
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -27,13 +26,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         val exactAlarmManagerImpl = AlarmManagerImpl(this)
         setUpNavController()
-
         if (!exactAlarmManagerImpl.canScheduleExactAlarms()) {
             openSettings()
         }
-        startBootCompletedReceiver(ComponentName(applicationContext, BootCompletedReceiver::class.java))
-        startBootCompletedReceiver(ComponentName(applicationContext, ExactAlarmBroadCastReceiver::class.java))
-        startBootCompletedReceiver(ComponentName(applicationContext, TimeChangedReceiver::class.java))
+        startBootCompletedReceiver()
     }
     private fun setUpNavController() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
@@ -46,7 +42,8 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM))
         }
     }
-    private fun startBootCompletedReceiver(receiver: ComponentName) {
+    private fun startBootCompletedReceiver() {
+        val receiver = ComponentName(applicationContext, BootCompletedReceiver::class.java)
         applicationContext.packageManager?.setComponentEnabledSetting(
             receiver,
             PackageManager.COMPONENT_ENABLED_STATE_ENABLED,

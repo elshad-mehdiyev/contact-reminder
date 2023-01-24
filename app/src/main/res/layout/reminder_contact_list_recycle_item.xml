@@ -157,8 +157,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/editor_text_background"
+                android:contentDescription="@string/interval"
                 android:fontFamily="@font/poppins"
                 android:gravity="center"
+                android:hint="@string/example"
                 android:inputType="numberSigned"
                 android:paddingStart="10dp"
                 android:paddingTop="6dp"
@@ -214,36 +216,6 @@
                 app:layout_constraintBottom_toBottomOf="@+id/textView11"
                 app:layout_constraintEnd_toEndOf="@+id/editorIntervalCardBack"
                 app:layout_constraintTop_toTopOf="@+id/textView11" />
-
-            <TextView
-                android:id="@+id/textView13"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:fontFamily="@font/poppins"
-                android:text="@string/end_hour"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="@+id/textView11"
-                app:layout_constraintTop_toBottomOf="@+id/textView11" />
-
-            <TextView
-                android:id="@+id/editorHourEndCardBack"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/editor_text_background"
-                android:fontFamily="@font/poppins"
-                android:gravity="center"
-                android:paddingStart="10dp"
-                android:paddingTop="6dp"
-                android:paddingEnd="10dp"
-                android:paddingBottom="4dp"
-                android:text="@{reminderList.endHour}"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="@+id/textView13"
-                app:layout_constraintEnd_toEndOf="@+id/editorHourStartCardBack"
-                app:layout_constraintTop_toTopOf="@+id/textView13" />
 
             <TextView
                 android:id="@+id/textView15"

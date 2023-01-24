@@ -10,7 +10,7 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.iremeber.rememberfriends.R
 import com.iremeber.rememberfriends.di.HiltAndroidApp
-import com.iremeber.rememberfriends.ui.MainActivity
+import com.iremeber.rememberfriends.ui.main_activity.MainActivity
 
 fun showNotification(
     context: Context,

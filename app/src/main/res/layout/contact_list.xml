@@ -240,36 +240,6 @@
             app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
         <TextView
-            android:id="@+id/textView13"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins"
-            android:text="@string/end_hour"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@+id/endTimePicker"
-            app:layout_constraintStart_toStartOf="@+id/textView11"
-            app:layout_constraintTop_toTopOf="@+id/endTimePicker" />
-
-        <TextView
-            android:id="@+id/endTimePicker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/editor_text_background"
-            android:fontFamily="@font/poppins"
-            android:gravity="center"
-            android:hint="13:30"
-            android:paddingStart="10dp"
-            android:paddingTop="6dp"
-            android:paddingEnd="10dp"
-            android:paddingBottom="4dp"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="@+id/beginningTimePicker"
-            app:layout_constraintTop_toBottomOf="@+id/beginningTimePicker" />
-
-        <TextView
             android:id="@+id/textView15"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -296,10 +266,10 @@
             android:id="@+id/createReminderButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="48dp"
             android:text="@string/create"
             app:layout_constraintEnd_toStartOf="@+id/rightHideFrameBack"
-            app:layout_constraintTop_toBottomOf="@+id/endTimePicker" />
+            app:layout_constraintTop_toBottomOf="@+id/beginningTimePicker" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
