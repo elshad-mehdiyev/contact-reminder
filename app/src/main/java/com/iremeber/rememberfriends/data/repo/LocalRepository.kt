@@ -7,7 +7,7 @@ import com.iremeber.rememberfriends.data.local.ScheduleDao
 import com.iremeber.rememberfriends.data.models.enums.DataSourceType
 import com.iremeber.rememberfriends.data.models.db_entities.FavoriteContactModel
 import com.iremeber.rememberfriends.data.models.db_entities.ScheduleAlarmModel
-import com.iremeber.rememberfriends.data.models.device_entities.AllContactModel
+import com.iremeber.rememberfriends.data.models.db_entities.AllContactModel
 import com.iremeber.rememberfriends.data.models.enums.UpdateSourceType
 import com.iremeber.rememberfriends.domain.update_entities.UpdateReminderCardAfterAlarmTriggerModel
 import com.iremeber.rememberfriends.domain.update_entities.UpdateReminderCardModel

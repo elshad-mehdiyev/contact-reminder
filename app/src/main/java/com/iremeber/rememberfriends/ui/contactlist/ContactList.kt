@@ -1,18 +1,16 @@
 package com.iremeber.rememberfriends.ui.contactlist
 
-import android.content.Context
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.iremeber.rememberfriends.data.models.enums.DataSourceType
-import com.iremeber.rememberfriends.data.models.device_entities.AllContactModel
+import com.iremeber.rememberfriends.data.models.db_entities.AllContactModel
 import com.iremeber.rememberfriends.data.models.db_entities.FavoriteContactModel
 import com.iremeber.rememberfriends.data.models.db_entities.ScheduleAlarmModel
 import com.iremeber.rememberfriends.databinding.ContactListBinding

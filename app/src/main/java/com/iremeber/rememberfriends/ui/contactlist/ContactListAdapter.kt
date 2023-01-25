@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.iremeber.rememberfriends.data.models.device_entities.AllContactModel
+import com.iremeber.rememberfriends.data.models.db_entities.AllContactModel
 import com.iremeber.rememberfriends.databinding.ContactListRecycleItemBinding
 import com.iremeber.rememberfriends.utils.util.CommonUtil
 

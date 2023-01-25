@@ -2,7 +2,7 @@ package com.iremeber.rememberfriends.data.local
 
 import android.app.Application
 import android.provider.ContactsContract
-import com.iremeber.rememberfriends.data.models.device_entities.AllContactModel
+import com.iremeber.rememberfriends.data.models.db_entities.AllContactModel
 import javax.inject.Inject
 
 class AllContacts @Inject constructor(private val application: Application) {

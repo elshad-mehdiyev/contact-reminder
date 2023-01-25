@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.iremeber.rememberfriends.R
 import com.iremeber.rememberfriends.data.models.enums.DataSourceType
-import com.iremeber.rememberfriends.data.models.device_entities.AllContactModel
+import com.iremeber.rememberfriends.data.models.db_entities.AllContactModel
 import com.iremeber.rememberfriends.data.models.db_entities.FavoriteContactModel
 import com.iremeber.rememberfriends.data.models.db_entities.ScheduleAlarmModel
 import com.iremeber.rememberfriends.data.models.enums.UpdateSourceType

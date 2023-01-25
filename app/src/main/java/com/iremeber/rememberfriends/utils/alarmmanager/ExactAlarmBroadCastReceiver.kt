@@ -105,7 +105,7 @@ class ExactAlarmBroadCastReceiver : HiltBroadcastReceiver() {
             message
         )
         job.launch(Dispatchers.IO) {
-            getDataFromDataStoreUseCase(MUSIC_ON_PREFERENCE_KEY).collectLatest {
+            getDataFromDataStoreUseCase(MUSIC_ON_PREFERENCE_KEY).collect {
                 if (it == 1) {
                     (context.applicationContext as HiltAndroidApp).apply {
                         alarmRingtoneState.value = playRingtone(context)

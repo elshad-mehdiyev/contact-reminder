@@ -7,10 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.iremeber.rememberfriends.data.models.enums.DataSourceType
 import com.iremeber.rememberfriends.data.models.db_entities.FavoriteContactModel
 import com.iremeber.rememberfriends.data.models.db_entities.ScheduleAlarmModel
-import com.iremeber.rememberfriends.data.models.device_entities.AllContactModel
 import com.iremeber.rememberfriends.domain.interactors.*
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

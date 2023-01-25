@@ -5,7 +5,7 @@
     <data>
         <variable
             name="contactList"
-            type="com.iremeber.rememberfriends.data.models.device_entities.AllContactModel" />
+            type="com.iremeber.rememberfriends.data.models.db_entities.AllContactModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

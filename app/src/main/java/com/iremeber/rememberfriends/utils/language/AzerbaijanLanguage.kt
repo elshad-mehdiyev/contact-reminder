@@ -1,6 +1,6 @@
 package com.iremeber.rememberfriends.utils.language
 
-import com.iremeber.rememberfriends.data.models.device_entities.AllContactModel
+import com.iremeber.rememberfriends.data.models.db_entities.AllContactModel
 import com.iremeber.rememberfriends.utils.util.UtilsWithContext
 
 class AzerbaijanLanguage : Language {

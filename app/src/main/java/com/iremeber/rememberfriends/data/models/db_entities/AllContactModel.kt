@@ -1,4 +1,4 @@
-package com.iremeber.rememberfriends.data.models.device_entities
+package com.iremeber.rememberfriends.data.models.db_entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
