@@ -62,7 +62,6 @@ fun showNotification(
     notificationManager.notify(notificationId, notification)
 }
 class AlarmNotificationDismissedBroadcastReceiver : BroadcastReceiver() {
-
     override fun onReceive(context: Context, intent: Intent) {
         (context.applicationContext as HiltAndroidApp).apply {
             alarmRingtoneState.value?.stop()

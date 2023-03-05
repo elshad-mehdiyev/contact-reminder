@@ -18,12 +18,11 @@ import com.iremeber.rememberfriends.utils.util.Constants.MUSIC_ON_PREFERENCE_KEY
 import com.iremeber.rememberfriends.utils.util.Constants.NOTIFICATION_CHANNEL_ID
 import com.iremeber.rememberfriends.utils.util.Constants.NOTIFICATION_CHANNEL_NAME
 import com.iremeber.rememberfriends.utils.util.Constants.NOTIFICATION_ID
-import com.iremeber.rememberfriends.utils.util.UtilsWithContext
+import com.iremeber.rememberfriends.utils.util.date_and_animation.DateAndAnimUtilImpl
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
@@ -43,13 +42,12 @@ class ExactAlarmBroadCastReceiver : HiltBroadcastReceiver() {
 
     private val job = CoroutineScope(SupervisorJob())
     private var systemLanguage = "en"
-    private lateinit var utils: UtilsWithContext
+    private lateinit var utils: DateAndAnimUtilImpl
 
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
         systemLanguage = Locale.getDefault().language
-        val languageSelector = LanguageFactory.languageForKey(systemLanguage)
-        utils = UtilsWithContext(context)
+        val languageSelector = LanguageFactory.languageForKey(context, systemLanguage)
         val alarmManagerImpl = AlarmManagerImpl(context)
         val requestCode = intent.getByteArrayExtra("requestCode")
         val timeInMillis = intent.getByteArrayExtra("timeInMillis")

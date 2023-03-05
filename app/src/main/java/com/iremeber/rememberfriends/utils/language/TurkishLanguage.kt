@@ -1,9 +1,10 @@
 package com.iremeber.rememberfriends.utils.language
 
+import android.content.Context
 import com.iremeber.rememberfriends.data.models.db_entities.AllContactModel
-import com.iremeber.rememberfriends.utils.util.UtilsWithContext
+import com.iremeber.rememberfriends.utils.util.date_and_animation.DateAndAnimUtilImpl
 
-class TurkishLanguage : Language {
+class TurkishLanguage(val context: Context) : Language {
     override fun displayReminderForContactText(
         allContactModel: AllContactModel
     ): String {
@@ -18,9 +19,9 @@ class TurkishLanguage : Language {
 
     override fun displayReminderCardDateText(
         list: List<String>,
-        utilsWithContext: UtilsWithContext
+        dateAndAnimUtilImpl: DateAndAnimUtilImpl
     ): String {
-        return "${list[0]} ${utilsWithContext.formatMonth(list[1])} " +
+        return "${list[0]} ${dateAndAnimUtilImpl.formatMonth(context, list[1])} " +
                 "${list[2]} tarihi için bir hatırlatıcı programlandı."
     }
 

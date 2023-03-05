@@ -26,18 +26,18 @@ import com.iremeber.rememberfriends.databinding.ReminderContactListBinding
 import com.iremeber.rememberfriends.utils.alarmmanager.AlarmManagerImpl
 import com.iremeber.rememberfriends.utils.language.Language
 import com.iremeber.rememberfriends.utils.language.LanguageFactory
-import com.iremeber.rememberfriends.utils.util.UtilsWithContext
+import com.iremeber.rememberfriends.utils.util.date_and_animation.DateAndAnimUtilImpl
 import com.iremeber.rememberfriends.di.HiltAndroidApp
+import com.iremeber.rememberfriends.utils.util.date_and_animation.DateAndAnimUtil
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
 @AndroidEntryPoint
-class ReminderContactList : Fragment() {
+class ReminderContactList : Fragment(), DateAndAnimUtil by DateAndAnimUtilImpl() {
     private var _binding: ReminderContactListBinding? = null
     private val binding get() = _binding!!
     private val recyclerAdapter = ReminderContactListAdapter()
     private val viewModel: ReminderContactViewModel by viewModels()
-    private lateinit var utils: UtilsWithContext
     private lateinit var alarmManagerImpl: AlarmManagerImpl
     private var systemLanguage = "en"
     private lateinit var languageSelector: Language
@@ -95,10 +95,10 @@ class ReminderContactList : Fragment() {
         recyclerAdapter.setTextClickListener { view ->
             when (view.id) {
                 R.id.editorDateCardBack -> {
-                    utils.showDatePickerDialog(view, childFragmentManager)
+                    showDatePickerDialog(requireContext(), view, childFragmentManager)
                 }
                 R.id.editorHourStartCardBack -> {
-                    utils.showTimePickerDialog(view, childFragmentManager)
+                    showTimePickerDialog(requireContext(), view, childFragmentManager)
                 }
             }
         }
@@ -113,7 +113,7 @@ class ReminderContactList : Fragment() {
             requireActivity().findViewById<TextView>(R.id.editorHourStartCardBack).text.toString()
 
         messageDate = updateDate.split("/")
-        updateMessage = languageSelector.displayReminderCardDateText(messageDate, utils)
+        updateMessage = languageSelector.displayReminderCardDateText(messageDate, getDateAndAnim())
         if (updateInterval.isEmpty()) updateInterval = "0"
         updateIntervalMessage =
             languageSelector.displayReminderCardInterval(updateInterval)
@@ -122,7 +122,7 @@ class ReminderContactList : Fragment() {
     private fun getTimeOfAlarm(): Long {
         val alarmHour = updateBeginHour.split(":")[0].toInt()
         val alarmMinute = updateBeginHour.split(":")[1].toInt()
-        return utils.convertToTimeInMillis(
+        return convertToTimeInMillis(
             alarmMinute, alarmHour,
             messageDate[0].toInt(), messageDate[1].toInt() - 1, messageDate[2].toInt()
         )
@@ -169,7 +169,7 @@ class ReminderContactList : Fragment() {
         recyclerAdapter.setEditorIconClickListener { model, viewFront, viewBack ->
             when (viewFront.id) {
                 R.id.backOfCard -> {
-                    utils.flipCard(requireContext(), viewFront, viewBack)
+                    flipCard(requireContext(), viewFront, viewBack)
                 }
                 R.id.frontOfCard -> {
                     createNotificationText(model)
@@ -177,7 +177,7 @@ class ReminderContactList : Fragment() {
                     updateFavoriteContactList(model)
                     updateScheduleAlarmModel(model)
                     updateAlarm(model)
-                    utils.flipCard(requireContext(), viewFront, viewBack)
+                    flipCard(requireContext(), viewFront, viewBack)
                 }
             }
         }
@@ -193,7 +193,7 @@ class ReminderContactList : Fragment() {
         val messageDate = favoriteModel.date.split("/")
         val alarmHour = favoriteModel.startHour.split(":")[0].toInt()
         val alarmMinute = favoriteModel.startHour.split(":")[1].toInt()
-        return utils.convertToTimeInMillis(
+        return convertToTimeInMillis(
             alarmMinute, alarmHour,
             messageDate[0].toInt(), messageDate[1].toInt() - 1, messageDate[2].toInt()
         )
@@ -262,11 +262,10 @@ class ReminderContactList : Fragment() {
 
     private fun initObjects() {
         systemLanguage = Locale.getDefault().language
-        utils = UtilsWithContext(requireContext())
         alarmManagerImpl = AlarmManagerImpl(requireContext())
         binding.recyclerReminderPage.layoutManager = LinearLayoutManager(context)
         binding.recyclerReminderPage.adapter = recyclerAdapter
-        languageSelector = LanguageFactory.languageForKey(systemLanguage)
+        languageSelector = LanguageFactory.languageForKey(requireContext(), systemLanguage)
     }
 
     override fun onDestroyView() {

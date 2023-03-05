@@ -18,19 +18,19 @@ import com.iremeber.rememberfriends.utils.alarmmanager.AlarmManagerImpl
 import com.iremeber.rememberfriends.utils.language.Language
 import com.iremeber.rememberfriends.utils.language.LanguageFactory
 import com.iremeber.rememberfriends.utils.util.Constants.REQUEST_CODE_PREFERENCE_KEY
-import com.iremeber.rememberfriends.utils.util.UtilsWithContext
+import com.iremeber.rememberfriends.utils.util.date_and_animation.DateAndAnimUtil
+import com.iremeber.rememberfriends.utils.util.date_and_animation.DateAndAnimUtilImpl
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
 
 @AndroidEntryPoint
-class ContactList : Fragment() {
+class ContactList : Fragment(), DateAndAnimUtil by DateAndAnimUtilImpl() {
     private var _binding: ContactListBinding? = null
     private val binding get() = _binding!!
     private val viewModel: ContactListViewModel by viewModels()
     private val contactListAdapter = ContactListAdapter()
     private lateinit var alarmManagerImpl: AlarmManagerImpl
-    private lateinit var utils: UtilsWithContext
     private var requestCode = 1000
     private var systemLanguage = "en"
     private lateinit var languageSelector: Language
@@ -63,15 +63,14 @@ class ContactList : Fragment() {
         binding.recyclerViewContactList.adapter = contactListAdapter
         systemLanguage = Locale.getDefault().language
         alarmManagerImpl = AlarmManagerImpl(requireContext())
-        utils = UtilsWithContext(requireContext())
-        languageSelector = LanguageFactory.languageForKey(systemLanguage)
+        languageSelector = LanguageFactory.languageForKey(requireContext(), systemLanguage)
     }
 
     private fun beginningStateForViews(allContactModel: AllContactModel) {
         binding.reminderForContact.text =
             languageSelector.displayReminderForContactText(allContactModel)
-        binding.datePicker.text = utils.getDate()
-        binding.beginningTimePicker.text = utils.getHourAndMinute()
+        binding.datePicker.text = getDate()
+        binding.beginningTimePicker.text = getHourAndMinute()
         message = languageSelector.displayNotificationText(allContactModel)
     }
 
@@ -89,7 +88,7 @@ class ContactList : Fragment() {
         if (alarmDate.isNotEmpty() && beginHour.isNotEmpty()) {
             val alarmHour = beginHour.split(":")[0].toInt()
             val alarmMinute = beginHour.split(":")[1].toInt()
-            timeOfAlarm = utils.convertToTimeInMillis(
+            timeOfAlarm = convertToTimeInMillis(
                 alarmMinute, alarmHour,
                 alarmDate[0].toInt(), alarmDate[1].toInt() - 1, alarmDate[2].toInt()
             )
@@ -117,7 +116,7 @@ class ContactList : Fragment() {
 
     private fun saveToFavoriteContactModel(allContactModel: AllContactModel) {
         val reminderCardDate =
-            languageSelector.displayReminderCardDateText(alarmDate, utils)
+            languageSelector.displayReminderCardDateText(alarmDate, getDateAndAnim())
         val reminderCardInterval =
             languageSelector.displayReminderCardInterval(interval)
         val favoriteContactModel = FavoriteContactModel(
@@ -177,10 +176,10 @@ class ContactList : Fragment() {
 
     private fun buttonClicker() {
         binding.datePicker.setOnClickListener {
-            utils.showDatePickerDialog(binding.datePicker, childFragmentManager)
+            showDatePickerDialog(requireContext(), binding.datePicker, childFragmentManager)
         }
         binding.beginningTimePicker.setOnClickListener {
-            utils.showTimePickerDialog(binding.beginningTimePicker, childFragmentManager)
+            showTimePickerDialog(requireContext(), binding.beginningTimePicker, childFragmentManager)
         }
         binding.cancelReminderButton.setOnClickListener {
             hideKeyboard()

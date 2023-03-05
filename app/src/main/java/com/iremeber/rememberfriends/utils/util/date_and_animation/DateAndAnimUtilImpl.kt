@@ -1,4 +1,4 @@
-package com.iremeber.rememberfriends.utils.util
+package com.iremeber.rememberfriends.utils.util.date_and_animation
 
 import android.animation.AnimatorInflater
 import android.animation.AnimatorSet
@@ -15,9 +15,9 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class UtilsWithContext(val context: Context) {
-
-    fun getHourAndMinute(): String {
+class DateAndAnimUtilImpl : DateAndAnimUtil {
+    override fun getDateAndAnim() = this
+    override fun getHourAndMinute(): String {
         val utc = Calendar.getInstance()
         val hour = utc.get(Calendar.HOUR_OF_DAY)
         val minute = utc.get(Calendar.MINUTE)
@@ -26,13 +26,13 @@ class UtilsWithContext(val context: Context) {
         return "$formatHour:$formatMinute"
     }
 
-    fun getDate(): String {
+    override fun getDate(): String {
         val calendar = Calendar.getInstance()
         val format = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         return format.format(calendar.time)
     }
 
-    fun convertToTimeInMillis(minute: Int, hour: Int, day: Int, month: Int, year: Int): Long {
+    override fun convertToTimeInMillis(minute: Int, hour: Int, day: Int, month: Int, year: Int): Long {
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.MINUTE, minute)
         calendar.set(Calendar.HOUR_OF_DAY, hour)
@@ -42,7 +42,7 @@ class UtilsWithContext(val context: Context) {
         return calendar.timeInMillis
     }
 
-    fun showDatePickerDialog(textView: TextView, manager: FragmentManager) {
+    override fun showDatePickerDialog(context: Context, textView: TextView, manager: FragmentManager) {
         val materialDateBuilder: MaterialDatePicker.Builder<*> =
             MaterialDatePicker.Builder.datePicker()
         materialDateBuilder.setTitleText(context.getString(R.string.select_date_text))
@@ -57,7 +57,7 @@ class UtilsWithContext(val context: Context) {
         }
     }
 
-    fun showTimePickerDialog(textView: TextView, manager: FragmentManager) {
+    override fun showTimePickerDialog(context: Context, textView: TextView, manager: FragmentManager) {
 
         val picker =
             MaterialTimePicker.Builder()
@@ -74,7 +74,7 @@ class UtilsWithContext(val context: Context) {
         }
     }
 
-    fun formatMonth(month: String?): String {
+    override fun formatMonth(context: Context, month: String?): String {
         return when (month) {
             "01" -> context.getString(R.string.january)
             "02" -> context.getString(R.string.february)
@@ -92,7 +92,7 @@ class UtilsWithContext(val context: Context) {
         }
     }
 
-    fun flipCard(context: Context, visibleView: View, inVisibleView: View) {
+    override fun flipCard(context: Context, visibleView: View, inVisibleView: View) {
         try {
             visibleView.visibility = View.VISIBLE
             val scale = context.resources.displayMetrics.density

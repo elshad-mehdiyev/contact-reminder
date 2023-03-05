@@ -1,11 +1,13 @@
 package com.iremeber.rememberfriends.utils.language
 
+import android.content.Context
+
 object LanguageFactory {
-    fun languageForKey(key: String): Language {
+    fun languageForKey(context: Context, key: String): Language {
         return when (key) {
-            "az" -> AzerbaijanLanguage()
-            "tr" -> TurkishLanguage()
-            else -> EnglishLanguage()
+            "az" -> AzerbaijanLanguage(context)
+            "tr" -> TurkishLanguage(context)
+            else -> EnglishLanguage(context)
         }
     }
 }
