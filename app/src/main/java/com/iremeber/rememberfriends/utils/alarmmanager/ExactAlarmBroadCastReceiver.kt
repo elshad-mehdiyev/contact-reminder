@@ -6,12 +6,12 @@ import android.util.Base64
 import com.iremeber.rememberfriends.R
 import com.iremeber.rememberfriends.data.models.enums.DataSourceType
 import com.iremeber.rememberfriends.data.models.enums.UpdateSourceType
-import com.iremeber.rememberfriends.domain.update_entities.UpdateReminderCardAfterAlarmTriggerModel
-import com.iremeber.rememberfriends.domain.update_entities.UpdateScheduleAlarmModel
 import com.iremeber.rememberfriends.di.HiltAndroidApp
 import com.iremeber.rememberfriends.domain.interactors.DeleteDataUseCase
 import com.iremeber.rememberfriends.domain.interactors.GetDataFromDataStoreUseCase
 import com.iremeber.rememberfriends.domain.interactors.UpdateDataUseCase
+import com.iremeber.rememberfriends.domain.update_entities.UpdateReminderCardAfterAlarmTriggerModel
+import com.iremeber.rememberfriends.domain.update_entities.UpdateScheduleAlarmModel
 import com.iremeber.rememberfriends.utils.language.LanguageFactory
 import com.iremeber.rememberfriends.utils.util.CommonUtil.getDate
 import com.iremeber.rememberfriends.utils.util.Constants.MUSIC_ON_PREFERENCE_KEY
@@ -24,7 +24,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import java.util.*
+import java.util.Locale
 import javax.inject.Inject
 
 
@@ -47,6 +47,7 @@ class ExactAlarmBroadCastReceiver : HiltBroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
         systemLanguage = Locale.getDefault().language
+        utils = DateAndAnimUtilImpl()
         val languageSelector = LanguageFactory.languageForKey(context, systemLanguage)
         val alarmManagerImpl = AlarmManagerImpl(context)
         val requestCode = intent.getByteArrayExtra("requestCode")
@@ -65,7 +66,6 @@ class ExactAlarmBroadCastReceiver : HiltBroadcastReceiver() {
                 interval = decodeInterval, message = message
             )
             val date = getDate(newTimeInMillis, "dd/MM/yyyy")
-            println(date)
             val messageDate = date.split("/")
             val updateMessage = languageSelector.displayReminderCardDateText(messageDate, utils)
             val updateReminderCardAfterAlarmTriggerModel = UpdateReminderCardAfterAlarmTriggerModel(

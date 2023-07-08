@@ -185,7 +185,7 @@ class ReminderContactList : Fragment(), DateAndAnimUtil by DateAndAnimUtilImpl()
 
     private fun createNotificationText(model: FavoriteContactModel) {
         val allContactModel =
-            AllContactModel(id = model.id, name = model.name, firstLetter = model.firstLetter)
+            AllContactModel(id = model.id, name = model.name, firstLetter = model.firstLetter, phoneNumber = "")
         notificationMessage = languageSelector.displayNotificationText(allContactModel)
     }
 
@@ -230,7 +230,8 @@ class ReminderContactList : Fragment(), DateAndAnimUtil by DateAndAnimUtilImpl()
                 val allContactModel = AllContactModel(
                     id = favoriteModel.id,
                     name = favoriteModel.name,
-                    firstLetter = favoriteModel.firstLetter
+                    firstLetter = favoriteModel.firstLetter,
+                    phoneNumber = ""
                 )
                 val message = languageSelector.displayNotificationText(allContactModel)
 

@@ -10,23 +10,51 @@ class AllContacts @Inject constructor(private val application: Application) {
         val contactsList = ArrayList<AllContactModel>()
         val contactsCursor = application.contentResolver?.query(
             ContactsContract.Contacts.CONTENT_URI,
+            arrayOf(
+                ContactsContract.Contacts._ID,
+                ContactsContract.Contacts.DISPLAY_NAME
+            ),
             null,
             null,
-            null,
-            ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC")
+            ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC"
+        )
         if (contactsCursor != null && contactsCursor.count > 0) {
             val idIndex = contactsCursor.getColumnIndex(ContactsContract.Contacts._ID)
             val nameIndex = contactsCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)
             while (contactsCursor.moveToNext()) {
                 val id = contactsCursor.getString(idIndex)
                 val name = contactsCursor.getString(nameIndex)
+                val phoneNumber = getPhoneNumber(id) // Fetch phone number separately
                 if (name != null) {
                     val firstLetter = name[0].toString()
-                    contactsList.add(AllContactModel(id = id, name = name, firstLetter = firstLetter))
+                    contactsList.add(
+                        AllContactModel(
+                            id = id,
+                            name = name,
+                            phoneNumber = phoneNumber ?: "",
+                            firstLetter = firstLetter
+                        )
+                    )
                 }
             }
             contactsCursor.close()
         }
         return contactsList
+    }
+
+    private fun getPhoneNumber(contactId: String): String? {
+        val phoneCursor = application.contentResolver?.query(
+            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+            arrayOf(ContactsContract.CommonDataKinds.Phone.NUMBER),
+            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+            arrayOf(contactId),
+            null
+        )
+        var phoneNumber: String? = null
+        if (phoneCursor != null && phoneCursor.moveToFirst()) {
+            phoneNumber = phoneCursor.getString(phoneCursor.run { getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER) })
+            phoneCursor.close()
+        }
+        return phoneNumber
     }
 }

@@ -9,5 +9,6 @@ data class AllContactModel(
     val dbId: Int? = null,
     val id: String,
     var name: String,
-    val firstLetter: String
+    val firstLetter: String,
+    val phoneNumber: String
 )
