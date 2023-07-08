@@ -8,14 +8,18 @@ import javax.inject.Inject
 class AllContacts @Inject constructor(private val application: Application) {
     fun getPhoneContacts(): ArrayList<AllContactModel> {
         val contactsList = ArrayList<AllContactModel>()
+
+        val selection = "${ContactsContract.RawContacts.ACCOUNT_TYPE} <> ?"
+        val selectionArgs = arrayOf("org.telegram.messenger.android.account")
+
         val contactsCursor = application.contentResolver?.query(
             ContactsContract.Contacts.CONTENT_URI,
             arrayOf(
                 ContactsContract.Contacts._ID,
                 ContactsContract.Contacts.DISPLAY_NAME
             ),
-            null,
-            null,
+            selection,
+            selectionArgs,
             ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC"
         )
         if (contactsCursor != null && contactsCursor.count > 0) {
